@@ -58,6 +58,20 @@ class ViewUserEntry:
                     return False
             return True
 
+    @staticmethod
+    def build_selection(iterable: list, display_message: str, assertions: list) -> dict:
+        display_message = display_message
+        assertions = assertions
+
+        for i, data in enumerate(iterable):
+            display_message = display_message + f"{i+1} - {data['name']}\n"
+            assertions.append(str(i+1))
+
+        return {
+            "message": display_message,
+            "assertions": assertions
+            }
+
 def display_check_timestamp():
     return datetime.now().strftime(format("%d/%m/%Y - %Hh%Mm%Ss"))
            #time.strftime(format("%d/%m/%Y - %Hh%Mm%Ss"))
@@ -69,3 +83,30 @@ class DisplayFrame:
         display_frame = pd.DataFrame(self, data, index, columns)
         print("Les données que vous avez entrer :")
         print(display_frame)
+
+
+class DisplayTour:
+
+    def __init__(self):
+        self.match = match_models.Match()
+
+    def display_tour(self, tour_name, list_matchs):
+
+        print(f"---------------------{tour_name}---------------------\n")
+        print()
+        for match in list_matchs:
+            print(match)
+            print()
+
+    def display_tour_time(self):
+        print()
+        input("Appuyez sur une touche pour commencer le tour")
+        print()
+        time_start = time.strftime(format("%d/%m/%Y - %Hh%Mm%Ss"))
+        print(f"Début du tour : {time_start}")
+        print()
+        input("Appuyez sur une touche lorsque le tour est terminé")
+        time_end = time.strftime(format("%d/%m/%Y - %Hh%Mm%Ss"))
+        print(f"Fin du tour : {time_end}")
+        print()
+        return time_start, time_end
