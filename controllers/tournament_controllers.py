@@ -1,7 +1,9 @@
 from models.tournament_models import Tournament
-from views.tournament_menu import CreateTournament
+from views.tournament_menu import CreateTournament, LoadingTournament
 from views.view_user_entry import ViewUserEntry
-from controllers.player_controllers import create_player
+from controllers.player_controllers import create_player, update_rankings
+#from controllers.database_controllers import DataBase, save_database, update_database, loading_player, loading_tournament
+#from models.tour_models import create_tour
 
 
 def create_tournament():
@@ -9,18 +11,18 @@ def create_tournament():
     menu = ViewUserEntry()
 
     # Récupération des données du tournoi
-    user_entries = CreateTournament().display_tournament_menu()
+    user_data = CreateTournament().display_tournament_menu()
 
     # Choix chargement des joueurs
     user_input = menu.user_entry(
-        message_display="Sélectionner\n0 - Créer des joueurs\n1 - Charger des joueurs\n> ",
+        message_display="Sélectionner\n1 - Créer des joueurs\n2 - Charger des joueurs\n> ",
         message_error="Entrer un choix valide",
         value_type="Sélection",
-        assertions=["0", "1"]
+        assertions=["1", "2"]
     )
 
     # Chargement des joueurs
-    if user_input == "1":
+    if user_input == "2":
         players = []
         user_input = menu.user_entry(
             message_display="Combien de joueurs a charger ?\n> ",
@@ -30,83 +32,121 @@ def create_tournament():
 
     # Création des joueurs
     else:
-        print(f"Création de {str(user_entries['number_players'])} joueurs")
+        print(f"Création de {str(user_data['number_players'])} joueurs")
         players = []
-        while len(players) < user_entries["number_players"]:
+        while len(players) < user_data['number_players']:
             players.append(create_player())
 
     # Création du tournoi
     tournament = Tournament(
-        user_entries["name"],
-        user_entries["location"],
-        user_entries["date"],
-        user_entries["time_control"],
+        user_data["name"],
+        user_data["location"],
+        user_data["date"],
+        user_data["time_control"],
         players,
-        user_entries["description"],
-        user_entries["number_tours"]
-    )
+        user_data["description"],
+        user_data["number_tours"])
+    
+    #save_database("tournaments", tournament.serialized_tournament())
 
     return tournament
 
-def play_tournament(tournament, load_new_tournament=False):
+def play_tournament(tournament, loading_new_tournament=False):
 
-	menu = ViewUserEntry()
+    menu = ViewUserEntry()
 
-	print(f"Début du tournoi {tournament.name}")
+    print(f"Début du tournoi {tournament.name}")
+    print()
 
-	while True:
+    while True:
 
-		# Calcul des tours restant à jouer pour un nouveau tournoi
-		z = 0 
-		if load_new_tournament:
-			for round in tournament.tours:
-				if round.time_end == "":
-					z += 1
-				number_tours_play = tournament.number_tours - z
-				load_new_tournament = False
-			else:
-				number_tours_play = tournament.number_tours
+        # Calcul des tours restant à jouer pour un nouveau tournoi
+        z = 0 
+        if loading_new_tournament:
+            for tour in tournament.tours:
+                if tour.time_end == "":
+                   z += 1
+            number_tours_play = tournament.number_tours - z
+            loading_new_tournament = False
+        else:
+            number_tours_play = tournament.number_tours
 
-			for i in range(number_tours_play):
-				# Création du tour
-				tournament.create_tours(tour_number=i+z)
+        for i in range(number_tours_play):
+                
+            # Création du tour
+            tournament.create_tour(tour_number=i+z)
 
-				# Joue le dernier tour créé
-				current_tour = tournament.tours[-1]
-				print(current_tour.time.start + " : Début du " + current_tour.name)
+            # Joue le dernier tour créé
+            current_tour = tournament.tours[-1]
+            print(current_tour.time_start + " : Début du " + current_tour.name)
 
-				# Le tour terminé on passe au tour suivant
-				while True:
-					user_input = menu.user_entry(
-						message_display = "Sélectionner\n"
-										  "0 - Tour suivant\n"
-										  "1 - Afficher les classements\n",
-						message_error = "Sélectionner un choix",
-						value_type = "Sélection",
-						assertions = ["0", "1"]
-					)
-					print()
+            # Le tour terminé on passe au tour suivant
+            while True:
+                user_input = menu.user_entry(
+                    message_display="Sélectionner\n"
+                                    "1 - Tour suivant\n"
+                                    "2 - Afficher les classements\n"
+                                    "3 - Mettre à jour les classements\n"
+                                    "4 - Sauvegarder le tournoi\n"
+                                    "5 - Charger un tournoi\n> ",
+                    message_error="Sélectionner un choix",
+                    value_type="Sélection",
+                    assertions=["1", "2", "3", "4", "5"]
+                )
+                print()
 
-					# Tour suivant 
-					if user_input == "0":
-						current_tour.match_completed()
-						break
+                # Tour suivant 
+                if user_input == "1":
+                    current_tour.match_completed()
+                    break
 
-					# Affiche les classements 
-					elif user_input == "1":
-						print(f"Classement du tournoi {tournament.name}\n")
-						for i, player in enumerate(tournament.get_ranking()):
-							print(f"{str(i + 1)} - {player}")
+                # Affiche les classements 
+                elif user_input == "2":
+                    print(f"Classement du tournoi {tournament.name}\n")
+                    for i, player in enumerate(tournament.tournament_rankings()):
+                        print(f"{str(i + 1)} - {player}")
 
-				if load_new_tournament:
-					break
+                # Changement des rangs
+                elif user_input == "3":
+                    for player in tournament.players:
+                        rank = menu.get_user_entry(
+                            message_display=f"Classement de {player}:\n> ",
+                            message_error="Veuillez entrer un nombre entier.",
+                            value_type="numeric"
+                        )
+                        update_rankings(player, rank, score=False)
+                
+                # Sauvegarder le tournoi
+                elif user_input == "4":
+                    rankings = tournament.tournament_rankings()
+                    for i, player in enumerate(rankings):
+                        for x_player in tournament.players:
+                            if player.name == x_player.name:
+                                x_player.rank = str(i + 1)
+                    #update_database("tournaments", tournament.serialized_tournament(save_tours=True))
 
-			if load_new_tournament:
-				continue 
+                # Charger un tournoi
+                elif user_input == "5":
+                    serialized_loading_tournament = LoadingTournament().display_loading_tournament_menu()
+                    tournament = load_tournament(serialized_loading_tournament)
+                    loading_new_tournament = True
+                    break
+                
+            if loading_new_tournament:
+                break
 
-			else:
-				break
+        if loading_new_tournament:
+            continue
 
+        else:
+            break
+    
+    rankings = tournament.tournament_rankings()
+    for i, player in enumerate(rankings):
+        for x_player in tournament.players:
+            if player.name == x_player.name:
+                x_player.total_score += player.tournament_score
+                x_player.rank = str(i+1)
+    #update_database("tournaments", tournament.serialized_tournament(save_tours=True))
 
-
-
+    return rankings
