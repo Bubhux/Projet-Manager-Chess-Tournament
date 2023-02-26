@@ -111,7 +111,7 @@ flake8 --format=html --htmldir=flake-report
 
 
 ## Développement
-Actuellement en cours de développement:   
+**Actuellement en cours de développement:**   
 - Une interface avec tkinter.   
 - Une fonction pour voir le temps total d'un tournoi.   
 - Une fonction générant un fichier csv des tournois et des joueurs.   
@@ -119,4 +119,4 @@ Actuellement en cours de développement:
 
 ## Auteur et contact 
 Pour toute information suplémentaire, vous pouvez me contacter.   
-Bubhux: bubhuxpaindepice@gmail.com   
+**Bubhux:** bubhuxpaindepice@gmail.com   
