@@ -9,14 +9,13 @@
 8. **Auteurs et contact**   
 
 ## Openclassrooms projet 4 Chess Tournament   
-Projet de création d'un programme, dont la structure et l'utilisation et la gestion d'un tournoi d'échecs.   
+- Projet de création d'un programme, dont la structure et l'utilisation et la gestion d'un tournoi d'échecs.   
 Le programme utilise le système suisse, la procédure d'appariement et d'organisation du programme respect ce même système.   
 le premier tour (appelé "rondes" aux échecs) est basé sur le classement elo des joueurs, ensuite entre le premier et le dernier tour la création d'appariement des paires est faite de façon aléatoire et non-répétitives.   
-Pour le dernier, tour l'appariement est fait sur le score s'ils sont égaux, alors l'appariement est fait par le classement elo ainsi   
-les joueurs les plus forts se rencontrent pour le tour final, il en est de même pour les joueurs les plus faibles.   
-Ainsi, avec ce système, chaque joueur participe au même nombre de matchs.   
+- Pour le dernier, tour l'appariement est fait sur le score s'ils sont égaux, alors l'appariement est fait par le classement elo.   
+- Par conséquent, de cette manière les joueurs les plus forts se rencontrent pour le tour final, il en est de même pour les joueurs les plus faibles. Ainsi, avec ce système, chaque joueur participe au même nombre de matchs.   
 
-Le programme est fonctionnel sur un format de 4 ou 8 joueurs avec un minimum de 4 tours par défaut.   
+- Le programme est fonctionnel sur un format de 4 ou 8 joueurs avec un minimum de 4 tours par défaut.   
 Il est architecturé et construit sur le design pattern MVC (Modèles - Vues - Controlleurs), l'utilisation de la librairie TinyDB est   nécessaire pour sauvegarder les joueurs et les tournois.   
 
 
