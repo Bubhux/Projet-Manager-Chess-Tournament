@@ -117,6 +117,6 @@ Actuellement en cours de développement:
 - Une fonction générant un fichier csv des tournois et des joueurs.   
 
 
-## Auteurs et contact 
+## Auteur et contact 
 Pour toute information suplémentaire, vous pouvez me contacter.   
 Bubhux: bubhuxpaindepice@gmail.com   
