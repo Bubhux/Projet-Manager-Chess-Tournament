@@ -21,8 +21,8 @@ Il est architecturé et construit sur le design pattern MVC (Modèles - Vues - C
 
 ## Liste pré-requis   
 Programme élaboré avec les logiciels suivants:   
--Python v3.7.2 choisissez la version adaptée a votre ordinateur et système python est disponible à l'adresse suivante   
-  https://www.python.org/downloads/   
+-Python v3.7.2 choisissez la version adaptée a votre ordinateur et système python est disponible à l'adresse suivante:   
+   https://www.python.org/downloads/   
 -Sublime Text 3.2.2 build 3211   
 -Cmder v1.3.19.1181 : remplace le cmd par défaut de Windows (optionnel)   
 -Windows 7 professionnel SP1   
