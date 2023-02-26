@@ -72,8 +72,8 @@ python main.py
 ```
 
 ## Utilisation de l'application
-Le menu principal est composé de 4 sous-menus.   
-1. **Céer un tournoi**   
+**Le menu principal est composé de 4 sous-menus.**   
+1. **Créer un tournoi**   
 -Le programme permet de créer, gérer et sauvegarder des tournois d'échecs.   
 -Pendant le tournoi, vous serez invité à saisir les résultats à la fin de chaque tour.   
 -le classement est accessible après chaque tour ainsi que sa mise à jour si nécessaire.   
