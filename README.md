@@ -1,4 +1,4 @@
-# Menu 
+# Menu   
 1. **Info general**   
 2. **Liste pré-requis**   
 3. **Création environnement virutel**   
@@ -8,7 +8,7 @@
 7. **Développement**   
 8. **Auteurs et contact**   
 
-## Openclassrooms projet 4 Chess Tournament
+## Openclassrooms projet 4 Chess Tournament   
 Projet de création d'un programme, dont la structure et l'utilisation et la gestion d'un tournoi d'échecs.   
 Le programme utilise le système suisse, la procédure d'appariement et d'organisation du programme respect ce même système.   
 le premier tour (appelé "rondes" aux échecs) est basé sur le classement elo des joueurs, ensuite entre le premier et le dernier tour la création d'appariement des paires est faite de façon aléatoire et non-répétitives.   
@@ -20,7 +20,7 @@ Le programme est fonctionnel sur un format de 4 ou 8 joueurs avec un minimum de 
 Il est architecturé et construit sur le design pattern MVC (Modèles - Vues - Controlleurs), l'utilisation de la librairie TinyDB est   nécessaire pour sauvegarder les joueurs et les tournois.   
 
 
-## Liste pré-requis 
+## Liste pré-requis   
 Programme élaboré avec les logiciels suivants:   
 -Python v3.7.2 choisissez la version adaptée a votre ordinateur et système python est disponible à l'adresse suivante   
   https://www.python.org/downloads/   
@@ -33,7 +33,7 @@ Programme élaboré avec les logiciels suivants:
 - Sur Mac, pressez la touche ```command + espace``` et entrez ```terminal```.   
 - Sur Linux, vous pouvez ouviri un terminal en pressant les touches ```Ctrl + Alt + T```.   
 
-## Création de l'environnement virtuel
+## Création de l'environnement virtuel   
 -Installer une version de Python compatible pour votre ordinateur.   
 -Une fois installer ouvrer le cmd (terminal) placer vous dans le dossier principale (dossier racine).   
 **-Taper dans votre terminal:**   
@@ -42,7 +42,7 @@ python -m venv env
 ```  
 Un répertoire appelé env doit être créé.   
 
-## Activation de l'environnement virtuel
+## Activation de l'environnement virtuel   
 -Placez-vous avec le terminal dans le dossier principale (dossier racine).   
 **-Pour activer l'environnement virtuel créé, il vous suffit de taper dans votre terminal:**   
 ```bash 
@@ -53,7 +53,7 @@ env\Scripts\activate.bat
 ```bash  
 deactivate
 ```
-## Installation des librairies
+## Installation des librairies   
 -Le programme utilise plusieurs librairies externes et modules de Python, qui sont répertoriés dans le fichier ```requirements.txt```.   
 -Placez-vous dans le dossier où se trouve le fichier requirements.txt avec le terminal, l'environnement virtuel doit être activé.   
 -Pour faire fonctionner le programme, il vous faudra installer les librairies requises.   
@@ -63,7 +63,7 @@ deactivate
 pip install -r requirements.txt
 ```
 
-## Exécution de l'application
+## Exécution de l'application   
 -Pour exécuter le programme placez vous dans le dossier principale (dossier racine) avec le terminal.   
 -L'environnement virtuel doit être activé.   
 **-Taper dans votre terminal la commande:**   
@@ -73,7 +73,7 @@ python main.py
 
 ## Utilisation de l'application
 Le menu principal est composé de 4 sous-menus.   
-1. **Céer un tournoi**
+1. **Céer un tournoi**   
 -Le programme permet de créer, gérer et sauvegarder des tournois d'échecs.   
 -Pendant le tournoi, vous serez invité à saisir les résultats à la fin de chaque tour.   
 -le classement est accessible après chaque tour ainsi que sa mise à jour si nécessaire.   
@@ -85,12 +85,12 @@ Le menu principal est composé de 4 sous-menus.
 3. **Charger un tournoi**   
 -Charge le tournoi sélectionné à partir de la base de données.   
 
-4. **Voir des rapports**
+4. **Voir des rapports**   
 -Dans cette section, vous pouvez consulter différents rapports.   
 -Consulter le classement et les informations sur les joueurs.   
 -Consulter les détails d'un tournoi : classements des joueurs, les tours et les matchs de chaque tournoi.   
 
-## Rapport avec flake8
+## Rapport avec flake8   
 -Le repository contient un rapport flake8, qui n'affiche aucune erreur.   
 -Il est possible d'en générer un nouveau en installant le module ```flake8``` s'il n'est pas installé.   
 **-Installation de flake8 en entrant dans votre terminal la commande:**   
@@ -113,9 +113,9 @@ flake8 --format=html --htmldir=flake-report
 
 ## Développement
 Actuellement en cours de développement:   
-Une interface avec tkinter.   
-Une fonction pour voir le temps total d'un tournoi.   
-Une fonction générant un fichier csv des tournois et des joueurs.   
+- Une interface avec tkinter.   
+- Une fonction pour voir le temps total d'un tournoi.   
+- Une fonction générant un fichier csv des tournois et des joueurs.   
 
 
 ## Auteurs et contact 
