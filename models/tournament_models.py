@@ -1,50 +1,126 @@
-"""Définit le tournoi."""
+"""Module tournament_models."""
 from models.tour_models import Tour
+from itertools import permutations
+from random import shuffle
 
 
 class Tournament:
-    """Tournoi"""
+    """Class Tournoi."""
 
-    def __init__(self, name, location, date, time_control, players, description=None, number_tours=4):
-                """Initialise initialise le tournoi"""
-                self.name = name
-                self.location = location
-                self.date = date
-                self.time_control = time_control
-                self.players = players
-                self.description = description
-                self.number_tours = number_tours
-                self.tours = []
+    def __init__(self, name, location, date, time_control, players, description="", number_tours=4):
+        """Initialise un tournoi."""
+        self.name = name
+        self.location = location
+        self.date = date
+        self.time_control = time_control
+        self.players = players
+        self.description = description
+        self.number_tours = number_tours
+        self.tours = []
+        self.match_played = []
 
     def __str__(self):
+        """Méthode __str__ called."""
         return f"Tournoi: {self.name} {self.description} à {self.location}"
 
     def __repr__(self):
-        return f"Tournoi: {self.name} {self.description} à {self.location}"
+        """Méthode __repr__ called."""
+        return str(self)
 
     def create_tour(self, tour_number):
+        """Fonction qui creé un tour."""
         pairs_players = self.create_pairs_players(current_tour=tour_number)
         tour = Tour("Tour " + str(tour_number + 1), pairs_players)
         self.tours.append(tour)
 
     def create_pairs_players(self, current_tour):
-        """Création des paires de joueurs"""
+        """Création des paires de joueurs."""
+        pairs_players = []
+        sorted_players = []
+        list_score_sorted_players = []
 
-        # Trie les joueurs par rapport à leurs classement pour le premier tour
+        # Premier tour l'appariement des joueurs et fait par le classement.
         if current_tour == 0:
-            sorted_players = sorted(self.players, key=lambda x: x.rank)
-            print("---test current_tour 1---")
+            sorted_players = sorted(self.players, key=lambda x: x.rank, reverse=True)
 
-        # Trie les joueurs par rapport à leurs scrore total pour le tour suivant
-        #elif current_tour == 3 or current_tour == 7:
-        #if current_tour > 0:
+            sup_player_part = sorted_players[len(sorted_players)//2:]
+            inf_player_part = sorted_players[:len(sorted_players)//2]
+
+            # Création des paires de joueurs pour le premeir tour.
+            for i, player in enumerate(sup_player_part):
+                count_player = 0
+                player_2 = inf_player_part[i+count_player]
+
+                # Asssignation du premier joueur de la partie supérieur au premier joueur de la partie inférieur.
+                pairs_players.append((player, player_2))
+                self.match_played.append((player, player_2))
+
+                player.played_with.append(player_2)
+                player_2.played_with.append(player)
+
+                if player in player_2.played_with:
+                    count_player += 1
+
+                else:
+                    pairs_players.append((player, player_2))
+                    player_2.played_with.append(player)
+                    player.played_with.append(player_2)
+
+        # Pour les tours compris entre le premier et le dernier tour.
+        # L'appariement des joueurs est fait de facon aléatoire et non répetitives.
+        # Chaque joueur fait le même nombre de matchs.
+        elif current_tour < self.number_tours - 1:
+            sorted_players = sorted(self.players)
+            pairs = list(permutations(sorted_players, 2))  # permutations de longueur 2 
+            shuffle(pairs)                                 # mélanger 
+
+            for x in pairs:
+                pairs_players.append(x)
+
+            # Chaque élément pair va remplir la liste si.
+            # L'élément pair trié n’existe pas déjà dans la liste pairs_players.
+            # Exemple élément pair = (1, 2) donnant (2, 1) sera rejeté puisque il existe déjà.
+            # Ou si l'élément trié est égal à lui même avant d'être trié.
+            # Exemple l'élément pair = (1, 2), donnant (1, 2) sera conservé puisque il est égal à lui-même.
+            pairs_players = [
+                x for x in pairs
+                if tuple(sorted(x))
+                not in pairs
+                or tuple(sorted(x)) == x
+            ]
+
+            for x in tuple(sorted(self.match_played)):
+                try:
+                    pairs_players.remove(x)
+                except ValueError:
+                    pass
+
+            exclude_indice_players = set()
+            match_list_available = []
+
+            # Exclue les indices de 2 joueurs sur les paires génerées de maniére aléatoires.
+            # Pour que lors d'un tour un joueur ne joue pas 2 matchs.
+            for x in pairs_players:
+                if (x[0] not in exclude_indice_players and x[1] not in exclude_indice_players):
+                    match_list_available.append(x)
+                    exclude_indice_players.add(x[0])
+                    exclude_indice_players.add(x[1])
+
+                    for player in exclude_indice_players:
+                        exclude_indice_players.add(player)
+
+            pairs_players = match_list_available
+
+            if len(self.players) == 8:
+                pairs_players = pairs_players[:4]
+            else:
+                pairs_players = pairs_players[:2]
+
+        # Pour le dernier tour l'appariement des joueurs est fait par le score ou le classement.
+        # Si deux joueurs ont le même score on les trie par rapport à leurs rangs.
+        # De cette maniére les joueurs ayant le même niveau s'affronte.
         else:
-            sorted_players = []
-            #print(f"liste sorted_players {(sorted_players)}")
-            score_sorted_players = sorted(self.players, key=lambda x: x.tournament_score)
-            print("---test next_current_tour---")
-
-            # Si deux joueurs ont le même score on les trie par rapport à leurs rangs
+            score_sorted_players = sorted(self.players, key=lambda x: x.tournament_score, reverse=True)
             for i, player in enumerate(score_sorted_players):
                 try:
                     sorted_players.append(player)
@@ -60,108 +136,28 @@ class Tournament:
                 except IndexError:
                     sorted_players.append(player)
 
-        # Trie les joueurs en 2 parties
-        sup_player_part = sorted_players[len(sorted_players)//2:]
-        inf_player_part = sorted_players[:len(sorted_players)//2]
+            if len(self.players) == 8:
+                list_score_sorted_players = (sorted_players[:2], sorted_players[2:4],
+                                             sorted_players[4:6], sorted_players[6:])
 
-        print(f"liste sup_player_part {(sup_player_part)}")
-        print(f"liste inf_player_part {(inf_player_part)}")
-        print(f"liste sorted_players {(sorted_players)}")
-
-        """
-        pairs_players = []
-
-        # Création des paires de joueurs
-        for i, player in enumerate(sup_player_part):
-            played_with = []
-            z = 0
-            while True:
-                try:
-                    player_2 = inf_player_part[i+z]
-
-                except IndexError:
-                    # Asssignation du dernier joueur de la partie supérieur au dernier joueur de la partie inférieur
-                    player_2 = inf_player_part[i]
-                    pairs_players.append((player, player_2))
-
-                    # Assignation des joueurs dans la liste "played_with" pour indiquer qu'ils ont déja jouer ensemble
-                    player_2.played_with.append(player)
-                    player.played_with.append(player_2)
-                    break
-
-                # Si player a joué contre player_2, on test avec player_3
-                if player in player_2.played_with:
-                    z += 1
-                    continue
-
-                # Si les 2 players n'ont jamais joués ensemble on crée la paires
-                # Sinon on assigne les players dans la liste played_with pour indiquer qu'ils ont déja joués ensemble
-                else:
-                    pairs_players.append((player, player_2))
-                    player_2.played_with.append(player)
-                    player.played_with.append(player_2)
-                    break
-
-        return pairs_players
-        """
-        pairs_players = []
-
-        # Création des paires de joueurs
-        #count_player = 0
-
-        for i, player in enumerate(sup_player_part):
-            count_player = 0
-            #played_with = []
-            #list_pairs_players = True
-            #played_with = True
-            #indice_inf_player_part = len(inf_player_part)-1
-            player_2 = inf_player_part[i+count_player]
-
-            # Asssignation du premier joueur de la partie supérieur au premier joueur de la partie inférieur
-            #player_2 = inf_player_part[indice_inf_player_part-i]
-            #player_2 = inf_player_part[i]
-            pairs_players.append((player, player_2))
-            print(f"Liste pairs_players {(pairs_players)}")
-
-            # Assignation des joueurs dans la liste "played_with" pour indiquer qu'ils ont déja jouer ensemble
-            player.played_with.append(player_2) 
-            player_2.played_with.append(player) 
-            print(f"Liste played_with {(player.played_with)}")
-            print(f"Liste played_with {(player_2.played_with)}")
-            #break
-            #continue
-
-            # si le joueur 1 à déja jouer contre le joueur 2 passer à joueur 3
-            #if current_tour > 0 and player in played_with:
-            #if current_tour != 3 and !=7:
-            if player in player_2.played_with:
-                #for player in played_with:
-                count_player += 1
-                print("---test count_player---")
-                #continue # la boucle continue même si la condition est déclenchée
-
-            # Si les 2 joueurs n'ont jamais joués ensemble on crée la paire
-            # Sinon on assigne les joueurs dans la liste played_with pour indiquer qu'ils ont déja joués ensemble
             else:
-                pairs_players.append((player, player_2)) 
-                played_with.append(player)
-                played_with.append(player_2)
-                #continue
-                #break
+                list_score_sorted_players = sorted_players[:2], sorted_players[2:]
+
+            pairs_players = [tuple(x) for x in list_score_sorted_players]
 
         return pairs_players
-        
-    def tournament_rankings(self, score_ranking=True):
 
-        # Renvoie le classement du tournoi par rapport aux points de chaque joueurs
+    def tournament_rankings(self, score_ranking=True):
+        """Renvoie le classement du tournoi par rapport aux points de chaque joueurs."""
         if score_ranking:
-            sorted_players = sorted(self.players, key=lambda x: x.tournament_score)
+            sorted_players = sorted(self.players, key=lambda x: x.tournament_score, reverse=True)
         else:
-            sorted_players =sorted(self.players, key=lambda x: x.rank)
+            sorted_players = sorted(self.players, key=lambda x: x.rank, reverse=True)
 
         return sorted_players
 
     def serialized_tournament(self, save_tours=False):
+        """Serialize les infos tournois et renvoie ces informations."""
         tournament_infos = {}
         tournament_infos['name'] = self.name
         tournament_infos['location'] = self.location
@@ -171,77 +167,8 @@ class Tournament:
         tournament_infos['description'] = self.description
         tournament_infos['number tours'] = self.number_tours
         tournament_infos['tours'] = [tour.serialized_tour() for tour in self.tours]
-        
+
         if save_tours:
             tournament_infos['tours'] = [tour.serialized_tour() for tour in self.tours]
 
         return tournament_infos
-
-
-
-"""
-pairs_players = []
-liste_player = ["player_1", "player_2", "player_3", "player_4"]
-
-tour 1 : match 1 => player_1 vs player_3, match 2 => player_2 vs player_4
-
-tour 2 : match 1 => player_1 vs player_4, match 2 => player_2 vs player_3
-for player in list_player[::3]:
-    print(player)
-    pairs_players.append(player)
-    print(pairs_players)
-
-return pairs_players
-
-player_1
-player_4
-["player_1", "player_4"]
-
-for player in list_player[1:3]:
-    print(player)
-    pairs_players.append(player)
-    print(pairs_players)
-
-return pairs_players
-
-player_2
-player_3
-["player_2", "player_3"]
-
-tour 3 : match 1 => player_1 vs player_2, match 2 => player_3 vs player_4
-for player in list_player[0:2]:
-    print(player)
-    pairs_players.append(player)
-    print(pairs_players)
-
-return pairs_players
-
-player_1
-player_2
-["player_1", "player_2"]
-
-for player in list_player[2:5]:
-    print(player)
-    pairs_players.append(player)
-    print(pairs_players)
-
-return pairs_players
-
-player_3
-player_4
-[player_3", "player_4"]
-
-tour 4 : trie par le score si les scrores du tournoi sont égaux trie par le rank 
-"""
-
-
-
-
-
-
-
-
-
-
-
-
