@@ -1,10 +1,11 @@
-import time
+"""Module view_user_entry."""
 from datetime import datetime
 
 
 class ViewUserEntry:
-
+    """Class des entrées de valeur saisie."""
     def user_entry(self, message_display, message_error, value_type, assertions=None, defaut_value=None):
+        """Fonction des entrées de saisie."""
         while True:
             value_input = input(message_display)
             if value_type == "numeric":
@@ -47,8 +48,9 @@ class ViewUserEntry:
                     print(message_error)
                     continue
 
-    @staticmethod
+    @staticmethod  # Atttirbut statique.
     def verification_date(value_test):
+        """Vérifie la saisie de la date de naissance."""
         if "/" not in value_test:
             return False
         else:
@@ -58,8 +60,9 @@ class ViewUserEntry:
                     return False
             return True
 
-    @staticmethod
+    @staticmethod  # Atttirbut statique.
     def build_selection(iterable: list, display_message: str, assertions: list) -> dict:
+        """Itére sur une liste renvoi un message et une assertion."""
         display_message = display_message
         assertions = assertions
 
@@ -70,43 +73,8 @@ class ViewUserEntry:
         return {
             "message": display_message,
             "assertions": assertions
-            }
+        }
 
-def display_check_timestamp():
-    return datetime.now().strftime(format("%d/%m/%Y - %Hh%Mm%Ss"))
-           #time.strftime(format("%d/%m/%Y - %Hh%Mm%Ss"))
-
-
-class DisplayFrame:
-
-    def display_data_frame(self, data, index=None, columns=None):
-        display_frame = pd.DataFrame(self, data, index, columns)
-        print("Les données que vous avez entrer :")
-        print(display_frame)
-
-
-class DisplayTour:
-
-    def __init__(self):
-        self.match = match_models.Match()
-
-    def display_tour(self, tour_name, list_matchs):
-
-        print(f"---------------------{tour_name}---------------------\n")
-        print()
-        for match in list_matchs:
-            print(match)
-            print()
-
-    def display_tour_time(self):
-        print()
-        input("Appuyez sur une touche pour commencer le tour")
-        print()
-        time_start = time.strftime(format("%d/%m/%Y - %Hh%Mm%Ss"))
-        print(f"Début du tour : {time_start}")
-        print()
-        input("Appuyez sur une touche lorsque le tour est terminé")
-        time_end = time.strftime(format("%d/%m/%Y - %Hh%Mm%Ss"))
-        print(f"Fin du tour : {time_end}")
-        print()
-        return time_start, time_end
+    def display_check_timestamp(self):
+        """Retourne l'heure et la date."""
+        return datetime.now().strftime(format("%d/%m/%Y - %Hh%Mm%Ss"))

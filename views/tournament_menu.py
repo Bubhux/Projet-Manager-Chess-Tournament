@@ -1,14 +1,15 @@
-from views.view_user_entry import ViewUserEntry, display_check_timestamp
-#from controllers.database_controllers import DataBase, loading_database
-#from models.match_models import Match
-
+"""Module tournament_menu."""
+from views.view_user_entry import ViewUserEntry
+from controllers.database_controllers import DataBase
 
 
 class CreateTournament(ViewUserEntry):
+    """Class création tournoi menu interface."""
 
     def display_tournament_menu(self):
-
-        date = display_check_timestamp()
+        """Affichage le menu de saisie lors de la création d'un tournoi."""
+        view = ViewUserEntry()
+        date = view.display_check_timestamp()
         print(date + " : Nouveau tournoi")
 
         name = input("Nom du tournoi :\n> ")
@@ -58,15 +59,19 @@ class CreateTournament(ViewUserEntry):
             "number_tours": number_tours
         }
 
+
 class LoadingTournament(ViewUserEntry):
+    """Class LoadingTournament."""
 
     def display_loading_tournament_menu(self):
+        """Affiche le menu pour charger un tournoi."""
+        database = DataBase()
 
-        all_tournaments = loading_database("tournaments")
+        all_tournaments = database.loading_database("tournaments")
         if all_tournaments:
 
             builded_selection = self.build_selection(iterable=all_tournaments,
-                                                     dislay_message="Sélectionner un tournoi :\n",
+                                                     display_message="Sélectionner un tournoi :\n",
                                                      assertions=[])
 
             user_input = int(self.user_entry(
@@ -81,41 +86,3 @@ class LoadingTournament(ViewUserEntry):
 
         else:
             return False
-"""
-class DisplayTour:
-
-    def __init__(self):
-        self.match = match_models.Match()
-
-    def display_tour(self, tour_name, list_matchs):
-
-        print(f"---------------------{tour_name}---------------------\n")
-        print()
-        for match in list_matchs:
-            print(match)
-            print()
-
-    def display_tour_time(self):
-        print()
-        input("Appuyez sur une touche pour commencer le tour")
-        print()
-        time_start = time.strftime(format("%d/%m/%Y - %Hh%Mm%Ss"))
-        print(f"Début du tour : {time_start}")
-        print()
-        input("Appuyez sur une touche lorsque le tour est terminé")
-        time_end = time.strftime(format("%d/%m/%Y - %Hh%Mm%Ss"))
-        print(f"Fin du tour : {time_end}")
-        print()
-        return time_start, time_end
-"""
-
-def test_main():
-
-     create_tournament = CreateTournament()
-     create_tournament.display_tournament_menu()
-
-
-if __name__ == "__main__":
-    test_main()
-
-

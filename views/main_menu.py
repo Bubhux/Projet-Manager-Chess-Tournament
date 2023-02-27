@@ -1,3 +1,4 @@
+"""Module main_menu."""
 from views.view_user_entry import ViewUserEntry
 from views.player_menu import CreatePlayer
 from views.tournament_menu import LoadingTournament
@@ -5,13 +6,14 @@ from views.report_menu import Report
 
 from controllers.tournament_controllers import create_tournament, play_tournament
 from controllers.player_controllers import update_rankings
-#from controllers.database_controllers import DataBase, save_database, loading_tournament
+from controllers.database_controllers import DataBase
 
 
 class MainMenu(ViewUserEntry):
-    """Affiche le menu principal"""
+    """Class affichage menu principal."""
     def display_main_menu(self):
-
+        """Fonction affichage du menu principal."""
+        database = DataBase()
         while True:
             print()
             user_input = self.user_entry(
@@ -25,13 +27,14 @@ class MainMenu(ViewUserEntry):
                 value_type="Sélection",
                 assertions=["1", "2", "3", "4", "q"]
             )
+            print()
 
-            # Créer un tournoi
+            # Créer un tournoi.
             if user_input == "1":
                 tournament = create_tournament()
                 break
 
-            # Créer des joueurs
+            # Créer des joueurs.
             elif user_input == "2":
                 user_input = self.user_entry(
                     message_display="Nombre de joueurs à créer :\n> ",
@@ -40,20 +43,19 @@ class MainMenu(ViewUserEntry):
                 )
                 for i in range(user_input):
                     CreatePlayer().display_create_player_menu()
-                    #serialized_new_player = CreatePlayer().display_create_player_menu()
-                    #save_db("players", serialized_new_player)
+                    serialized_new_player = CreatePlayer().display_create_player_menu()
+                    database.save_database("players", serialized_new_player)
 
-            # Charger un tournoi
+            # Charger un tournoi.
             elif user_input == "3":
                 serialized_tournament = LoadingTournament().display_loading_tournament_menu()
                 if serialized_tournament:
-                    tournament = load_tournament(serialized_tournament)
+                    tournament = database.loading_tournament(serialized_tournament)
                     break
                 else:
-                    print("Aucun tournoi sauvegardé !")
+                    print("Aucun tournoi sauvegardé. 1a")
                     continue
-            
-            # Voir les rapports
+            # Voir les rapports.
             elif user_input == "4":
                 while True:
                     user_input = self.user_entry(
@@ -62,6 +64,7 @@ class MainMenu(ViewUserEntry):
                         value_type="Sélection",
                         assertions=["1", "2", "r"]
                     )
+                    print()
 
                     if user_input == "r":
                         break
@@ -77,21 +80,33 @@ class MainMenu(ViewUserEntry):
                                 value_type="Sélection",
                                 assertions=["1", "2", "r"]
                             )
-                            if user_input == "r":
-                                break
-                            elif user_input == "1":
-                                sorted_players = Report().sort_players(Report().players, by_rank=True)
-                                Report().display_players_report(players=sorted_players)
-                            elif user_input == "2":
-                                sorted_players = Report().sort_players(Report().players, by_rank=False)
-                                Report().display_players_report(players=sorted_players)
+                            print()
+                            try:
+                                if user_input == "r":
+                                    break
+                                elif user_input == "1":
+                                    sorted_players = Report().sort_players(Report().players, by_rank=True)
+                                    Report().display_menu_players_reports(players=sorted_players)
 
-                    elif user_input == "1":
-                        Report().display_menu_tournaments_reports()
+                                elif user_input == "2":
+                                    sorted_players = Report().sort_players(Report().players, by_rank=False)
+                                    Report().display_menu_players_reports(players=sorted_players)
+                            except TypeError:
+                                pass
+                                print("Aucun joueurs sauvegardés.")
+                                print()
+
+                    elif user_input == "2":
+                        try:
+                            Report().display_menu_tournaments_reports()
+                        except TypeError:
+                            pass
+                            print("Aucun tournoi sauvegardé.")
+                            print()
             else:
                 quit()
 
-        # Lancement du tournoi
+        # Lancement du tournoi.
         print()
         user_input = self.user_entry(
             message_display="Sélectionner\n"
@@ -102,18 +117,17 @@ class MainMenu(ViewUserEntry):
             assertions=["1", "q"]
         )
 
-        # Récupèration des résultats quand le tournoi est terminé
+        # Récupèration des résultats quand le tournoi est terminé.
         if user_input == "1":
             rankings = play_tournament(tournament, loading_new_tournament=True)
         else:
             quit()
 
-        # Affiche les résultats
+        # Affiche les résultats.
         print()
         print(f"Le tournoi {tournament.name} est terminé \nRésultats :")
         for i, player in enumerate(rankings):
             print(f"{str(i+1)} - {player}")
-        
         # Mise à jour des classements
         print()
         user_input = self.user_entry(
@@ -142,13 +156,3 @@ class MainMenu(ViewUserEntry):
 
         else:
             quit()
-        
-
-def test_main():
-
-    main_menu = MainMenu()
-    main_menu.display_main_menu()
-
-
-if __name__ == "__main__":
-    test_main()
