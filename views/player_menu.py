@@ -1,25 +1,22 @@
+"""Module player_menu."""
 from views.view_user_entry import ViewUserEntry
+from controllers.database_controllers import DataBase
 
 
 class CreatePlayer(ViewUserEntry):
-    """Player view."""
+    """Class crétion de joueurs."""
     def display_create_player_menu(self):
-        
-        """Saisie pour le prénom"""
+        """Fonction d'affichage du menu de création de joueur."""
         name = input("Tapez le prénom du joueur : ")
-
-        """Saisie pour le nom"""
         surname = input("Tapez le nom du joueur : ")
 
-        """Saisie pour la date d'anniversaire"""
-        #birthday_date_input = input("Tapez la date de naissance du joueur : ")
         birthday_date = self.user_entry(
             message_display="Tapez la date de naissance du joueur (format DD/MM/YYYY) :\n> ",
             message_error="Veuillez entrer une date au format valide : DD/MM/YYYY",
             value_type="date"
         )
 
-        """Saisie du sexe"""
+        """Saisie du sexe."""
         sexe = self.user_entry(
             message_display="Sexe (H ou F) :\n ",
             message_error="Veuillez entrer H ou F",
@@ -27,24 +24,9 @@ class CreatePlayer(ViewUserEntry):
             assertions=["H", "h", "F", "f"]
         )
 
-        """Saisie pour le classement"""
-        #rank_input = input("Tapez le classement du joueur : ")
+        """Saisie pour le classement."""
         rank = self.user_entry(
             message_display="Tapez le classement du joueur\n> ",
-            message_error="Veuillez entrer une valeur numérique valide",
-            value_type="numeric"
-        )
-
-        """Saisie du score"""
-        total_score = self.user_entry(
-            message_display="Entrer le score total\n> ",
-            message_error="Veuillez entrer une valeur numérique valide",
-            value_type="numeric"
-        )
-
-        """Saisie du score de tournoi"""
-        tournament_score = self.user_entry(
-            message_display="Entrer le score de tournoi\n> ",
             message_error="Veuillez entrer une valeur numérique valide",
             value_type="numeric"
         )
@@ -63,10 +45,12 @@ class CreatePlayer(ViewUserEntry):
 
 
 class LoadindPlayer(ViewUserEntry):
+    """Class pour le chargement de joueur."""
 
     def display_loading_player(self, number_players_loading):
-
-        all_players = loading_database("players")
+        """Affiche le menu pour le chargement d'un joueur."""
+        database = DataBase
+        all_players = database.loading_database("players")
         serialized_loading_players = []
         for i in range(number_players_loading):
             print(f"Plus que {str(number_players_loading - i)} joueurs à charger")
@@ -89,14 +73,3 @@ class LoadindPlayer(ViewUserEntry):
                 number_players_loading += 1
 
         return serialized_loading_players
-
-
-
-def test_main():
-
-    create_player = CreatePlayer()
-    create_player.display_create_player_menu()
-
-
-if __name__ == "__main__":
-    test_main()
