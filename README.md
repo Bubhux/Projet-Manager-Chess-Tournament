@@ -1,5 +1,5 @@
 # Menu   
-1. **Info general**   
+1. **Informations générales**   
 2. **Liste pré-requis**   
 3. **Création environnement virutel**   
 4. **Activation environnement virutel**   
@@ -8,15 +8,15 @@
 7. **Développement**   
 8. **Auteurs et contact**   
 
-## Openclassrooms projet 4 Chess Tournament   
+## Chess Tournament   
 - Projet de création d'un programme, dont la structure et l'utilisation et la gestion d'un tournoi d'échecs.   
 Le programme utilise le système suisse, la procédure d'appariement et d'organisation du programme respect ce même système.   
 le premier tour (appelé "rondes" aux échecs) est basé sur le classement elo des joueurs, ensuite entre le premier et le dernier tour la création d'appariement des paires est faite de façon aléatoire et non-répétitives.   
 - Pour le dernier, tour l'appariement est fait sur le score s'ils sont égaux, alors l'appariement est fait par le classement elo.   
-- Par conséquent, de cette manière les joueurs les plus forts se rencontrent pour le tour final, il en est de même pour les joueurs les plus faibles. Ainsi, avec ce système, chaque joueur participe au même nombre de matchs.   
+- Par conséquent, de cette manière, les joueurs les plus forts se rencontrent pour le tour final, il en est de même pour les joueurs les plus faibles. Ainsi, avec ce système, chaque joueur participe au même nombre de matchs.   
 
 - Le programme est fonctionnel sur un format de 4 ou 8 joueurs avec un minimum de 4 tours par défaut.   
-Il est architecturé et construit sur le design pattern MVC (Modèles - Vues - Controlleurs), l'utilisation de la librairie TinyDB est   nécessaire pour sauvegarder les joueurs et les tournois.   
+Il est architecturé et construit sur le design pattern MVC (Modèles - Vues - Controlleurs), l'utilisation de la librairie TinyDB est   necessaire pour sauvegarder les joueurs et les tournois.   
 
 
 ## Liste pré-requis   
@@ -26,14 +26,14 @@ Programme élaboré avec les logiciels suivants:
 -Cmder v1.3.19.1181 : remplace le cmd par défaut de Windows (optionnel)   
 -Windows 7 professionnel SP1   
 
-- Les scripts python s'exécute depuis un terminal.   
+- Les scripts python s'exécutent depuis un terminal.   
 - Pour ouvrir un terminal sur Windows, pressez la touche ```windows + r``` et entrez ```cmd```.   
 - Sur Mac, pressez la touche ```command + espace``` et entrez ```terminal```.   
-- Sur Linux, vous pouvez ouviri un terminal en pressant les touches ```Ctrl + Alt + T```.   
+- Sur Linux, vous pouvez ouvrir un terminal en pressant les touches ```Ctrl + Alt + T```.   
 
 ## Création de l'environnement virtuel   
 -Installer une version de Python compatible pour votre ordinateur.   
--Une fois installer ouvrer le cmd (terminal) placer vous dans le dossier principale (dossier racine).   
+-Une fois installer ouvrer le cmd (terminal) placer vous dans le dossier principal (dossier racine).   
 **-Taper dans votre terminal:**   
 ```bash  
 python -m venv env
@@ -41,7 +41,7 @@ python -m venv env
 Un répertoire appelé env doit être créé.   
 
 ## Activation de l'environnement virtuel   
--Placez-vous avec le terminal dans le dossier principale (dossier racine).   
+-Placez-vous avec le terminal dans le dossier principal (dossier racine).   
 **-Pour activer l'environnement virtuel créé, il vous suffit de taper dans votre terminal:**   
 ```bash 
 env\Scripts\activate.bat
@@ -62,7 +62,7 @@ pip install -r requirements.txt
 ```
 
 ## Exécution de l'application   
--Pour exécuter le programme placez vous dans le dossier principale (dossier racine) avec le terminal.   
+-Pour exécuter le programme placez vous dans le dossier principal (dossier racine) avec le terminal.   
 -L'environnement virtuel doit être activé.   
 **-Taper dans votre terminal la commande:**   
 ```bash
