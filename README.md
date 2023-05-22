@@ -8,7 +8,7 @@
 7. **Développement**   
 8. **Auteurs et contact**   
 
-## Chess Tournament   
+## Manager Chess Tournament   
 - Projet de création d'un programme, dont la structure et l'utilisation et la gestion d'un tournoi d'échecs.   
 Le programme utilise le système suisse, la procédure d'appariement et d'organisation du programme respect ce même système.   
 le premier tour (appelé "rondes" aux échecs) est basé sur le classement elo des joueurs, ensuite entre le premier et le dernier tour la création d'appariement des paires est faite de façon aléatoire et non-répétitives.   
