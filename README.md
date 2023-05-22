@@ -95,7 +95,7 @@ python main.py
 ```bash
 pip install flake8-html
 ```
-- Créer un fichier ```setup.cfg``` si il n'existe pas.   
+- Créer un fichier ```.flake8``` si il n'existe pas.   
 - **Ecrire le texte suivant dedans:**   
 ```bash
 [flake8]
