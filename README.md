@@ -93,7 +93,7 @@ python main.py
 -Il est possible d'en générer un nouveau en installant le module ```flake8``` s'il n'est pas installé.   
 **-Installation de flake8 en entrant dans votre terminal la commande:**   
 ```bash
-pip intall flake8-html
+pip install flake8-html
 ```
 - Créer un fichier ```setup.cfg``` si il n'existe pas.   
 - **Ecrire le texte suivant dedans:**   
