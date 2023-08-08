@@ -117,11 +117,6 @@ flake8 --format=html --htmldir=flake-report
 - Une fonction pour voir le temps total d'un tournoi.   
 - Une fonction générant un fichier csv des tournois et des joueurs.   
 
-
-## Auteur et contact 
-Pour toute information suplémentaire, vous pouvez me contacter.   
-**Bubhux:** bubhuxpaindepice@gmail.com   
-=======
 # Menu   
 1. **Informations générales**   
 2. **Liste pré-requis**   
@@ -243,4 +238,3 @@ flake8 --format=html --htmldir=flake-report
 ## Auteur et contact 
 Pour toute information suplémentaire, vous pouvez me contacter.   
 **Bubhux:** bubhuxpaindepice@gmail.com   
->>>>>>> bf627b76b9cb9450ed58a74525d174b8b0cd76c1
