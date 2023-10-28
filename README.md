@@ -4,13 +4,13 @@
 
 # Menu   
 1. **[Informations générales](#informations-générales)**   
-2. **[Liste pré-requis](#liste-pre-requis)**    
+2. **[Liste pré-requis](#liste-pre-requis)**   
 3. **[Création environnement](#creation-environnement)**   
 4. **[Activation environnement](#activation-environnement)**   
 5. **[Installation des librairies](#installation-librairies)**   
-6. **[Exécution de l'application](#execution-application)**    
-7. **[Utilisation de l'application](#utilisation-application)**
-7. **[Rapport avec flake8](#rapport-flake8)** 
+6. **[Exécution de l'application](#execution-application)**   
+7. **[Utilisation de l'application](#utilisation-application)**   
+7. **[Rapport avec flake8](#rapport-flake8)**   
 7. **[Développement](#developpement)**   
 8. **[Auteur et contact](#auteur-contact)**   
 
@@ -274,4 +274,3 @@ flake8 --format=html --htmldir=flake-report
 ## Auteur et contact 
 Pour toute information suplémentaire, vous pouvez me contacter.   
 **Bubhux:** bubhuxpaindepice@gmail.com   
->>>>>>> c4c68085eec6ccdb1d2b75f5b8a9b94ea49f5b0e
