@@ -21,11 +21,15 @@ class Report(ViewUserEntry):
             display_message="Voir les détails d'un joueur:\n",
             assertions=["r"]
         )
+        print()
 
         while True:
             print("Classement: ")
             # Affichage du classement.
-            # Choix d'un joueur dans le classement afin de voir ses détails.
+            for i, player in enumerate(players, start=1):
+                print(f"{i} - {player['name']} {player['surname']}")
+            print()
+
             user_input = self.user_entry(
                 message_display=builded_selection['message'] + "r - Retour\n> ",
                 message_error="Veuillez faire un choix valide.",
@@ -39,26 +43,24 @@ class Report(ViewUserEntry):
             else:
                 selected_player = players[int(user_input)-1]
 
-                # Affichage des détails du joueur.
-                while True:
-                    print(f"Détails du joueur {selected_player['name']}:")
-                    print(f"Rang: {selected_player['rank']}\n"
-                          f"Score total: {selected_player['total score']}\n"
-                          f"Nom: {selected_player['name']}\n"
-                          f"Prénom: {selected_player['surname']}\n"
-                          f"Date de naissance: {selected_player['birthday date']}\n"
-                          f"Sexe: {selected_player['sexe']}\n"
-                          )
+                # Affichage des détails du joueur sélectionné.
+                print(f"Détails du joueur {selected_player['name']} {selected_player['surname']}:")
+                print(f"Rang: {selected_player['rank']}\n"
+                      f"Score total: {selected_player['total score']}\n"
+                      f"Nom complet: {selected_player['name']} {selected_player['surname']}\n"
+                      f"Date de naissance: {selected_player['birthday date']}\n"
+                      f"Sexe: {selected_player['sexe']}\n"
+                      )
 
-                    user_input = self.user_entry(
-                        message_display="Sélectionner\n r - Retour\n> ",
-                        message_error="Veuillez faire un choix valide.",
-                        value_type="Sélection",
-                        assertions=["r"]
-                    )
+                user_input = self.user_entry(
+                    message_display="Sélectionner\n r - Retour\n> ",
+                    message_error="Veuillez faire un choix valide.",
+                    value_type="Sélection",
+                    assertions=["r"]
+                )
 
-                    if user_input == "r":
-                        break
+                if user_input == "r":
+                    break
 
     def display_menu_tournaments_reports(self):
         """Affiche le menu pour les rapports de tournoi."""
@@ -88,6 +90,7 @@ class Report(ViewUserEntry):
 
                 # Affichage des détails du tournoi choisi.
                 while True:
+                    print()
                     print(f"Détails du tournoi {selected_tournament['name']}\n"
                           f"Nom: {selected_tournament['name']}\n"
                           f"Lieu: {selected_tournament['location']}\n"
@@ -107,6 +110,7 @@ class Report(ViewUserEntry):
                         value_type="Sélection",
                         assertions=["1", "2", "3", "r"]
                     )
+                    print()
 
                     if user_input == "r":
                         break
@@ -198,11 +202,11 @@ class Report(ViewUserEntry):
                             selected_match = selected_tour['matchs'][int(user_input)-1]
                             while True:
                                 print(f"Détails du {selected_match['name']}\n"
-                                      f"{selected_match['player 1']['name']}"
-                                      f"{selected_match['player 1']['surname']}"
+                                      f"{selected_match['player 1']['name']} "
+                                      f"{selected_match['player 1']['surname']} "
                                       f"{selected_match['score player 1']} pts\n"
-                                      f"{selected_match['player 2']['name']}"
-                                      f"{selected_match['player 2']['surname']}"
+                                      f"{selected_match['player 2']['name']} "
+                                      f"{selected_match['player 2']['surname']} "
                                       f"{selected_match['score player 2']} pts\n"
                                       f"Gagnant : {selected_match['winner']}\n"
                                       )

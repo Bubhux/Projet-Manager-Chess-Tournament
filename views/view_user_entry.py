@@ -63,11 +63,11 @@ class ViewUserEntry:
     @staticmethod  # Atttirbut statique.
     def build_selection(iterable: list, display_message: str, assertions: list) -> dict:
         """Itére sur une liste renvoi un message et une assertion."""
-        display_message = display_message
-        assertions = assertions
-
         for i, data in enumerate(iterable):
-            display_message = display_message + f"{i+1} - {data['name']}\n"
+            if 'surname' in data:
+                display_message += f"{i+1} - {data['name']} {data['surname']}\n"
+            else:
+                display_message += f"{i+1} - {data['name']}\n"
             assertions.append(str(i+1))
 
         return {
