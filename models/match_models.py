@@ -1,4 +1,6 @@
 """Module match_models."""
+from rich.console import Console
+from rich.table import Table
 from views.view_user_entry import ViewUserEntry
 
 
@@ -15,31 +17,43 @@ class Match:
         self.winner = ""
 
     def __repr__(self):
-        # Méthode __repr__ called
+        # Méthode __repr__ appelée
         return ([self.player_1, self.score_player_1],
                 [self.player_2, self.score_player_2])
 
     def match_played(self):
         """Affiche le match qui est joué et affiche la sélection pour saisir le gagnant."""
-        winner = ViewUserEntry().user_entry(
-            message_display=f"{self.player_1.name} {self.player_1.surname} --VS-- " +
-                            f"{self.player_2.name} {self.player_2.surname}\n"
+        console = Console()
 
-                            f"Sélectionner le gagnant\n"
-                            f"1 - {self.player_1.name} {self.player_1.surname}\n"
-                            f"2 - {self.player_2.name} {self.player_2.surname}\n"
-                            f"3 - Égalité\n> ",
+        # Affiche le titre du tableau sur une seule ligne
+        console.print(f"{self.player_1.name} {self.player_1.surname} --VS-- "
+                      f"{self.player_2.name} {self.player_2.surname}", style="bold magenta")
+
+        # Créer un tableau pour afficher les informations du match
+        table = Table(show_lines=True)
+        table.add_column("Sélection", justify="center")
+        table.add_column("Joueur", justify="center")
+
+        table.add_row("1", f"{self.player_1.name} {self.player_1.surname}")
+        table.add_row("2", f"{self.player_2.name} {self.player_2.surname}")
+        table.add_row("3", "Égalité")
+
+        # Affiche le tableau
+        console.print(table)
+
+        winner = ViewUserEntry().user_entry(
+            message_display="> ",
             message_error="Sélectionner 1, 2 ou 3",
             value_type="Sélection",
             assertions=["1", "2", "3"]
         )
-        print()
+        console.print()
 
         if winner == "1":
-            self.winner = self.player_1.name, self.player_1.surname
+            self.winner = f"{self.player_1.name} {self.player_1.surname}"
             self.score_player_1 += 1
         elif winner == "2":
-            self.winner = self.player_2.name, self.player_2.surname
+            self.winner = f"{self.player_2.name} {self.player_2.surname}"
             self.score_player_2 += 1
         elif winner == "3":
             self.winner = "Égalité"

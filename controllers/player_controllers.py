@@ -39,4 +39,4 @@ def update_rankings(player, rank, score=True):
     serialized_player = player.serialized_player(save_tournament_score=True)
     database.update_player_rank("players", serialized_player)
     print(f"Mise à jour du rang de {player}:\nScore total: {player.total_score} pts\nRang: {player.rank}")
-    print("==================================================================")
+    print("=============================================================================================")

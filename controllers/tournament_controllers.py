@@ -1,4 +1,6 @@
 """Module tournament_controllers."""
+from rich.console import Console
+from rich.table import Table
 from models.tournament_models import Tournament
 from views.view_user_entry import ViewUserEntry
 from views.tournament_menu import CreateTournament, LoadingTournament
@@ -11,13 +13,16 @@ def create_tournament():
     """Fonction création de tournoi."""
     menu = ViewUserEntry()
     database = DataBase()
+    console = Console()
 
     # Récupération des données du tournoi.
     user_data = CreateTournament().display_tournament_menu()
 
     # Choix chargement des joueurs.
+    console.print("[bold]Sélectionner[/bold]\n1 - Créer des joueurs\n2 - Charger des joueurs")
+
     user_input = menu.user_entry(
-        message_display="Sélectionner\n1 - Créer des joueurs\n2 - Charger des joueurs\n> ",
+        message_display="> ",
         message_error="Entrer un choix valide",
         value_type="Sélection",
         assertions=["1", "2"]
@@ -27,7 +32,7 @@ def create_tournament():
     if user_input == "2":
         players = []
         user_input = menu.user_entry(
-            message_display="Combien de joueurs a charger ?\n> ",
+            message_display="Combien de joueurs à charger ?\n> ",
             message_error="Entrer 0 ou 1",
             value_type="numeric"
         )
@@ -40,10 +45,9 @@ def create_tournament():
 
     # Création des joueurs.
     else:
-        print(f"Création de {str(user_data['number_players'])} joueurs")
-        players = []
-        while len(players) < user_data['number_players']:
-            players.append(create_player())
+        console.print(f"Création de {str(user_data['number_players'])} joueurs")
+
+        players = [create_player() for _ in range(int(user_data['number_players']))]
 
     # Création du tournoi.
     tournament = Tournament(
@@ -63,13 +67,13 @@ def play_tournament(tournament, loading_new_tournament=False):
     """Affiche le début du tournoi."""
     menu = ViewUserEntry()
     database = DataBase()
+    console = Console()
 
-    print(f"Début du tournoi {tournament.name}")
-    print()
+    console.print(f"Début du tournoi {tournament.name}")
+    console.print()
 
     while True:
-
-        # Calcul des tours restant à jouer pour un nouveau tournoi.
+        # Calcul des tours restants à jouer pour un nouveau tournoi.
         z = 0
         if loading_new_tournament:
             for tour in tournament.tours:
@@ -86,22 +90,24 @@ def play_tournament(tournament, loading_new_tournament=False):
 
             # Joue le dernier tour créé.
             current_tour = tournament.tours[-1]
-            print(current_tour.time_start + " : Début du " + current_tour.name)
+            console.print(current_tour.time_start + " : Début du " + current_tour.name)
 
             # Le tour terminé on passe au tour suivant.
             while True:
+                console.print("\nSélectionner", style="bold blue")
+                console.print("1 - Tour suivant")
+                console.print("2 - Afficher les classements")
+                console.print("3 - Mettre à jour les classements")
+                console.print("4 - Sauvegarder le tournoi")
+                console.print("5 - Charger un tournoi")
+
                 user_input = menu.user_entry(
-                    message_display="Sélectionner\n"
-                                    "1 - Tour suivant\n"
-                                    "2 - Afficher les classements\n"
-                                    "3 - Mettre à jour les classements\n"
-                                    "4 - Sauvegarder le tournoi\n"
-                                    "5 - Charger un tournoi\n> ",
+                    message_display="> ",
                     message_error="Sélectionner un choix",
                     value_type="Sélection",
                     assertions=["1", "2", "3", "4", "5"]
                 )
-                print()
+                console.print()
 
                 # Tour suivant.
                 if user_input == "1":
@@ -110,10 +116,18 @@ def play_tournament(tournament, loading_new_tournament=False):
 
                 # Affiche les classements.
                 elif user_input == "2":
-                    print(f"Classement du tournoi {tournament.name}\n")
+                    console.print(f"Classement du tournoi {tournament.name}\n", style="bold green")
+                    table = Table(title="Classement", title_justify="left")
+                    table.add_column("Position", justify="center", style="bold magenta")
+                    table.add_column("Joueur", justify="center", style="bold magenta")
                     for i, player in enumerate(tournament.tournament_rankings()):
-                        print(f"{str(i+1)} - Joueur {player}")
-                    print()
+                        table.add_row(str(i+1), f"Joueur {player}")
+
+                    # Modifie le style des titres des colonnes
+                    table.columns[0].header_style = "bold white"
+                    table.columns[1].header_style = "bold white"
+                    console.print(table)
+                    console.print()
 
                 # Changement des rangs.
                 elif user_input == "3":
@@ -124,7 +138,8 @@ def play_tournament(tournament, loading_new_tournament=False):
                             value_type="numeric"
                         )
                         update_rankings(player, rank, score=False)
-                    print()
+                    console.print()
+
                 # Sauvegarder le tournoi.
                 elif user_input == "4":
                     rankings = tournament.tournament_rankings()
@@ -134,6 +149,7 @@ def play_tournament(tournament, loading_new_tournament=False):
                                 x_player.rank = str(i+1)
                     database.update_tournament_database("tournaments",
                                                         tournament.serialized_tournament(save_tours=True))
+
                 # Charger un tournoi.
                 elif user_input == "5":
                     serialized_loading_tournament = LoadingTournament().display_loading_tournament_menu()
@@ -144,7 +160,6 @@ def play_tournament(tournament, loading_new_tournament=False):
                 break
         if loading_new_tournament:
             continue
-
         else:
             break
 

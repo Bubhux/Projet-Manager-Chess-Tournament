@@ -48,31 +48,18 @@ class Tournament:
 
             # Création des paires de joueurs pour le premeir tour.
             for i, player in enumerate(sup_player_part):
-                count_player = 0
-                player_2 = inf_player_part[i+count_player]
+                player_2 = inf_player_part[i]
 
                 # Asssignation du premier joueur de la partie supérieur au premier joueur de la partie inférieur.
                 pairs_players.append((player, player_2))
-                self.match_played.append((player, player_2))
-
-                player.played_with.append(player_2)
-                player_2.played_with.append(player)
-
-                if player in player_2.played_with:
-                    count_player += 1
-
-                else:
-                    pairs_players.append((player, player_2))
-                    player_2.played_with.append(player)
-                    player.played_with.append(player_2)
 
         # Pour les tours compris entre le premier et le dernier tour.
         # L'appariement des joueurs est fait de facon aléatoire et non répetitives.
         # Chaque joueur fait le même nombre de matchs.
         elif current_tour < self.number_tours - 1:
             sorted_players = sorted(self.players)
-            pairs = list(permutations(sorted_players, 2))  # permutations de longueur 2 
-            shuffle(pairs)                                 # mélanger 
+            pairs = list(permutations(sorted_players, 2))  # permutations de longueur 2
+            shuffle(pairs)                                 # mélanger
 
             for x in pairs:
                 pairs_players.append(x)

@@ -1,4 +1,4 @@
-#ignore le dossier d'environnement virtuel 
 env/
 .vscode/
 **/__pycache__/
+/reports

@@ -13,7 +13,6 @@ class Player:
         self.rank = rank
         self.total_score = total_score
         self.tournament_score = 0
-        self.played_with = []
 
     def __lt__(self, other):
         # Méthode __lt__ called

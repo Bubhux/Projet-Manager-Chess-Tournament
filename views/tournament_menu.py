@@ -1,6 +1,7 @@
 """Module tournament_menu."""
 from views.view_user_entry import ViewUserEntry
 from controllers.database_controllers import DataBase
+from rich.console import Console
 
 
 class CreateTournament(ViewUserEntry):
@@ -8,21 +9,27 @@ class CreateTournament(ViewUserEntry):
 
     def display_tournament_menu(self):
         """Affichage le menu de saisie lors de la création d'un tournoi."""
+        console = Console()
         view = ViewUserEntry()
         date = view.display_check_timestamp()
-        print(date + " : Nouveau tournoi")
+        console.print(date + " : Nouveau tournoi")
 
-        name = input("Nom du tournoi :\n> ")
-        description = input("Description du tournoi :\n> ")
+        console.print("Nom du tournoi :", style="bold blue")
+        name = input("> ")
 
+        console.print("Description du tournoi :", style="bold blue")
+        description = input("> ")
+
+        console.print("Lieu :", style="bold blue")
         location = self.user_entry(
-            message_display="Lieu :\n> ",
+            message_display="> ",
             message_error="Entrer un lieu valide",
             value_type="string"
         )
 
+        console.print("Contrôle de temps :", style="bold blue")
         user_selection_time = self.user_entry(
-            message_display="Contrôle de temps :\n1 - Bullet\n2 - Blitz\n3 - Coup rapide\n> ",
+            message_display="1 - Bullet\n2 - Blitz\n3 - Coup rapide\n> ",
             message_error="Veuillez entrer 1, 2 ou 3",
             value_type="Sélection",
             assertions=["1", "2", "3"]
@@ -35,18 +42,20 @@ class CreateTournament(ViewUserEntry):
         else:
             time_control = "Coup rapide"
 
+        console.print("Nombre de joueurs :", style="bold blue")
         number_players = self.user_entry(
-            message_display="Nombre de joueurs :\n> ",
+            message_display="> ",
             message_error="Veuillez entrer un nombre entier supérieur à 1 ou 2",
             value_type="numeric_superior",
-            defaut_value=2
+            default_value=2
         )
 
+        console.print("Nombre de tours (4 par défaut) :", style="bold blue")
         number_tours = self.user_entry(
-            message_display="Nombre de tours (4 par défaut) :\n> ",
+            message_display="> ",
             message_error="Veuillez entrer 4 ou plus",
             value_type="numeric_superior",
-            defaut_value=4
+            default_value=4
         )
 
         return {
@@ -65,21 +74,29 @@ class LoadingTournament(ViewUserEntry):
 
     def display_loading_tournament_menu(self):
         """Affiche le menu pour charger un tournoi."""
+        console = Console()
         database = DataBase()
 
         all_tournaments = database.loading_database("tournaments")
         if all_tournaments:
+            builded_selection = self.build_selection(
+                iterable=all_tournaments,
+                display_message="Sélectionner un tournoi :\n",
+                assertions=["r"]  # Ajout de la touche 'r' pour retour
+            )
 
-            builded_selection = self.build_selection(iterable=all_tournaments,
-                                                     display_message="Sélectionner un tournoi :\n",
-                                                     assertions=[])
-
-            user_input = int(self.user_entry(
-                message_display=builded_selection['message'] + "\n> ",
+            console.print(builded_selection['message'] + "r - Retour", style="bold blue")
+            user_input = self.user_entry(
+                message_display="> ",
                 message_error="Sélectionner un nombre entier",
                 value_type="Sélection",
                 assertions=builded_selection['assertions']
-            ))
+            )
+
+            if user_input == "r":
+                return False  # Si l'utilisateur choisit de revenir, retourne False
+
+            user_input = int(user_input)
             serialized_loading_tournament = all_tournaments[user_input - 1]
 
             return serialized_loading_tournament

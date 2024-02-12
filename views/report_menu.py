@@ -2,6 +2,8 @@
 from views.view_user_entry import ViewUserEntry
 from controllers.database_controllers import DataBase
 from operator import itemgetter
+from rich.console import Console
+from rich.table import Table
 
 
 class Report(ViewUserEntry):
@@ -11,24 +13,33 @@ class Report(ViewUserEntry):
         database = DataBase()
         self.players = database.loading_database("players")
         self.tournaments = database.loading_database("tournaments")
+        self.console = Console()
 
     def display_menu_players_reports(self, players=[]):
         """Affiche le menu pour le rapport des joueurs."""
-        players = players
-
-        builded_selection = self.build_selection(
-            iterable=players,
-            display_message="Voir les détails d'un joueur:\n",
-            assertions=["r"]
-        )
-        print()
 
         while True:
-            print("Classement: ")
             # Affichage du classement.
+            self.console.print()
+            table = Table(title="Classement tournoi", title_justify="left")
+            table.add_column("ID")
+            table.add_column("Nom", style="bold magenta")
+            table.add_column("Prénom", style="bold magenta")
+
             for i, player in enumerate(players, start=1):
-                print(f"{i} - {player['name']} {player['surname']}")
+                table.add_row(str(i), player['name'], player['surname'])
+
+            self.console.print(table)
             print()
+
+            players = players
+            self.console.print("Voir les détails d'un joueur", style="bold blue")
+
+            builded_selection = self.build_selection(
+                iterable=players,
+                display_message="",
+                assertions=["r"]
+            )
 
             user_input = self.user_entry(
                 message_display=builded_selection['message'] + "r - Retour\n> ",
@@ -42,18 +53,30 @@ class Report(ViewUserEntry):
 
             else:
                 selected_player = players[int(user_input)-1]
+                self.console.print()
 
                 # Affichage des détails du joueur sélectionné.
-                print(f"Détails du joueur {selected_player['name']} {selected_player['surname']}:")
-                print(f"Rang: {selected_player['rank']}\n"
-                      f"Score total: {selected_player['total score']}\n"
-                      f"Nom complet: {selected_player['name']} {selected_player['surname']}\n"
-                      f"Date de naissance: {selected_player['birthday date']}\n"
-                      f"Sexe: {selected_player['sexe']}\n"
-                      )
+                table = Table(
+                    title=f"Détails du joueur {selected_player['name']} {selected_player['surname']}",
+                    style="bold blue"
+                )
+
+                table.add_column("Attribut")
+                table.add_column("Valeur")
+
+                table.add_row("Rang:", str(selected_player['rank']))
+                table.add_row("Score total:", str(selected_player['total score']))
+                table.add_row("Nom complet:", f"{selected_player['name']} {selected_player['surname']}")
+                table.add_row("Date de naissance:", selected_player['birthday date'])
+                table.add_row("Sexe:", selected_player['sexe'])
+
+                self.console.print(table)
+
+                self.console.print("\nSélectionner", style="bold blue")
+                self.console.print("r - Retour")
 
                 user_input = self.user_entry(
-                    message_display="Sélectionner\n r - Retour\n> ",
+                    message_display="> ",
                     message_error="Veuillez faire un choix valide.",
                     value_type="Sélection",
                     assertions=["r"]
@@ -64,15 +87,15 @@ class Report(ViewUserEntry):
 
     def display_menu_tournaments_reports(self):
         """Affiche le menu pour les rapports de tournoi."""
+        self.console.print("Voir les détails d'un tournoi", style="bold blue")
+
         builded_selection = self.build_selection(
             iterable=self.tournaments,
-            display_message="Voir les détails d'un tournoi:\n",
+            display_message="",
             assertions=['r']
         )
 
         while True:
-            print("Tournois:")
-
             # Affichage de tout les tournois.
             # Choix d'un tournoi afin d'en voir les détails.
             user_input = self.user_entry(
@@ -89,67 +112,74 @@ class Report(ViewUserEntry):
                 selected_tournament = self.tournaments[int(user_input)-1]
 
                 # Affichage des détails du tournoi choisi.
-                while True:
-                    print()
-                    print(f"Détails du tournoi {selected_tournament['name']}\n"
-                          f"Nom: {selected_tournament['name']}\n"
-                          f"Lieu: {selected_tournament['location']}\n"
-                          f"Date: {selected_tournament['date']}\n"
-                          f"Contrôle du temps: {selected_tournament['time control']}\n"
-                          f"Nombre de tours: {selected_tournament['number tours']}\n"
-                          f"Description: {selected_tournament['description']}\n"
-                          )
+                table = Table(title=f"Détails du tournoi {selected_tournament['name']}")
+                table.add_column("Attribut")
+                table.add_column("Valeur")
 
-                    user_input = self.user_entry(
-                        message_display="Sélectionner\n"
-                                        "1 - Voir les participants\n"
-                                        "2 - Voir les tours\n"
-                                        "r - Retour\n"
-                                        "> ",
-                        message_error="Veuillez entrer une sélection valide",
-                        value_type="Sélection",
-                        assertions=["1", "2", "3", "r"]
-                    )
-                    print()
+                table.add_row("Nom", selected_tournament['name'])
+                table.add_row("Lieu", selected_tournament['location'])
+                table.add_row("Date", selected_tournament['date'])
+                table.add_row("Contrôle du temps", selected_tournament['time control'])
+                table.add_row("Nombre de tours", str(selected_tournament['number tours']))
+                table.add_row("Description", selected_tournament['description'])
 
-                    if user_input == "r":
-                        break
+                self.console.print(table)
 
-                    elif user_input == "1":
-                        while True:
-                            user_input = self.user_entry(
-                                message_display="Type de classement:\n"
-                                                "1 - Par rang\n"
-                                                "2 - Par ordre alphabétique\n"
-                                                "r - Retour\n"
-                                                "> ",
-                                message_error="Veuillez entrer une sélection valide",
-                                value_type="Sélection",
-                                assertions=["1", "2", "r"]
-                            )
+                self.console.print("\nSélectionner", style="bold blue")
+                self.console.print("1 - Voir les participants")
+                self.console.print("2 - Voir les tours")
+                self.console.print("r - Retour")
 
-                            if user_input == "r":
-                                break
-                            elif user_input == "1":
-                                sorted_players = self.sort_players(selected_tournament["players"], by_rank=True)
-                                self.display_menu_players_reports(players=sorted_players)
-                            elif user_input == "2":
-                                sorted_players = self.sort_players(selected_tournament["players"], by_rank=False)
-                                self.display_menu_players_reports(players=sorted_players)
+                user_input = self.user_entry(
+                    message_display="> ",
+                    message_error="Veuillez entrer une sélection valide",
+                    value_type="Sélection",
+                    assertions=["1", "2", "r"]
+                )
 
-                    elif user_input == "2":
-                        self.display_menu_tours(selected_tournament["tours"])
+                if user_input == "r":
+                    break
+
+                elif user_input == "1":
+                    while True:
+                        self.console.print("\nType de classement", style="bold blue")
+                        self.console.print("1 - Par rang")
+                        self.console.print("2 - Par ordre alphabétique")
+                        self.console.print("r - Retour")
+                        self.console.print()
+
+                        user_input = self.user_entry(
+                            message_display="> ",
+                            message_error="Veuillez entrer une sélection valide",
+                            value_type="Sélection",
+                            assertions=["1", "2", "r"]
+                        )
+
+                        if user_input == "r":
+                            break
+                        elif user_input == "1":
+                            sorted_players = self.sort_players(selected_tournament["players"], by_rank=True)
+                            self.display_menu_players_reports(players=sorted_players)
+                        elif user_input == "2":
+                            sorted_players = self.sort_players(selected_tournament["players"], by_rank=False)
+                            self.display_menu_players_reports(players=sorted_players)
+
+                elif user_input == "2":
+                    self.display_menu_tours(selected_tournament["tours"])
 
     def display_menu_tours(self, tours: list):
         """Affiche le menu des détails d'un tour."""
+        self.console.print()
+        self.console.print("Voir les détails d'un tour", style="bold blue")
+
         builded_selection = self.build_selection(
             iterable=tours,
-            display_message="Voir les détails d'un tour:\n",
+            display_message="",
             assertions=['r']
         )
 
         while True:
-            print("Tours:")
+            console = Console()
 
             user_input = self.user_entry(
                 message_display=builded_selection['message'] + "r - Retour\n> ",
@@ -162,17 +192,25 @@ class Report(ViewUserEntry):
                 break
 
             else:
-                selected_tour = tours[int(user_input)-1]
+                selected_tour = tours[int(user_input) - 1]
                 while True:
-                    print(f"Détails du tour {selected_tour['name']}\n"
-                          f"Nom: {selected_tour['name']}\n"
-                          f"Nombre de matchs: {len(selected_tour['matchs'])}\n"
-                          f"Date de début: {selected_tour['time start']}\n"
-                          f"Date de fin: {selected_tour['time end']}\n"
-                          )
+                    table = Table(title=f"Détails du tour {selected_tour['name']}")
+                    table.add_column("Attribut")
+                    table.add_column("Valeur")
+
+                    table.add_row("Nom", selected_tour['name'])
+                    table.add_row("Nombre de matchs", str(len(selected_tour['matchs'])))
+                    table.add_row("Date de début", selected_tour['time start'])
+                    table.add_row("Date de fin", selected_tour['time end'])
+
+                    console.print(table)
+
+                    self.console.print("\nSélectionner", style="bold blue")
+                    self.console.print("1 - Voir les matchs")
+                    self.console.print("r - Retour")
 
                     user_input = self.user_entry(
-                        message_display="Sélectionner\n1 - Voir les matchs\nr - Retour\n> ",
+                        message_display="> ",
                         message_error="Veuillez faire un choix valide",
                         value_type="Sélection",
                         assertions=["1", "r"]
@@ -182,13 +220,14 @@ class Report(ViewUserEntry):
                         break
 
                     else:
+                        self.console.print("\nVoir les détails d'un match", style="bold blue")
+
                         builded_selection = self.build_selection(
                             iterable=selected_tour['matchs'],
-                            display_message="Voir les détails d'un match\n",
+                            display_message="",
                             assertions=['r']
                         )
 
-                        print("Matchs:")
                         user_input = self.user_entry(
                             message_display=builded_selection['message'] + "r - Retour\n> ",
                             message_error="Veuillez faire un choix valide.",
@@ -199,23 +238,38 @@ class Report(ViewUserEntry):
                         if user_input == "r":
                             break
                         else:
-                            selected_match = selected_tour['matchs'][int(user_input)-1]
+                            selected_match = selected_tour['matchs'][int(user_input) - 1]
                             while True:
-                                print(f"Détails du {selected_match['name']}\n"
-                                      f"{selected_match['player 1']['name']} "
-                                      f"{selected_match['player 1']['surname']} "
-                                      f"{selected_match['score player 1']} pts\n"
-                                      f"{selected_match['player 2']['name']} "
-                                      f"{selected_match['player 2']['surname']} "
-                                      f"{selected_match['score player 2']} pts\n"
-                                      f"Gagnant : {selected_match['winner']}\n"
-                                      )
+                                table = Table(title=f"Détails du {selected_match['name']}")
+                                table.add_column("Attribut")
+                                table.add_column("Valeur")
+
+                                table.add_row(
+                                    "Joueur 1",
+                                    f"{selected_match['player 1']['name']} {selected_match['player 1']['surname']} "
+                                    f"({selected_match['score player 1']} pts)"
+                                )
+                                table.add_row(
+                                    "Joueur 2",
+                                    f"{selected_match['player 2']['name']} {selected_match['player 2']['surname']} "
+                                    f"({selected_match['score player 2']} pts)"
+                                )
+                                # Récupére le prénom et le nom du gagnant
+                                winner_name = ' '.join(selected_match['winner']) if selected_match['winner'] else "Pending"
+                                table.add_row("Gagnant", winner_name)
+
+                                console.print(table)
+
+                                self.console.print("\nSélectionner", style="bold blue")
+                                self.console.print("r - Retour")
+
                                 user_input = self.user_entry(
-                                    message_display="Sélectionner\nr - Retour\n> ",
+                                    message_display="> ",
                                     message_error="Veuillez faire un choix valide",
                                     value_type="Sélection",
                                     assertions=["r"]
                                 )
+
                                 if user_input == "r":
                                     break
 

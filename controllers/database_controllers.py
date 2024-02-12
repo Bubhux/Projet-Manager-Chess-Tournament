@@ -55,7 +55,7 @@ class DataBase:
             db = TinyDB(f"save data/{database_name}.json")
             return db.all()
         except FileNotFoundError:
-            pass
+            return None
 
     def loading_player(self, serialized_player, loading_tournament_score=False):
         """Charge un joueur."""
