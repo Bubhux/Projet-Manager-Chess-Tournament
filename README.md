@@ -19,11 +19,7 @@
 10. **[Développement](#developpement)**   
 11. **[Auteur et contact](#auteur-contact)**     
 
-
-<div style="display: flex; align-items: center;">
-    <h3>Projet Chess Tournament</h3>
-    <img src="/static/pictures/icon_chess.png" alt="Icon Chess" width="60">
-</div>
+### Projet Chess Tournament ![Icon chess](static/pictures/icon_chess.png)   
 
 - Projet de création d'un programme, dont la structure et l'utilisation et la gestion d'un tournoi d'échecs.   
   Le programme utilise le système suisse, la procédure d'appariement et d'organisation du programme respect ce même système.   
