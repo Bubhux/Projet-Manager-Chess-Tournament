@@ -58,13 +58,13 @@ class Player:
         player_infos = {}
         player_infos['name'] = self.name
         player_infos['surname'] = self.surname
-        player_infos['birthday date'] = self.birthday_date
+        player_infos['birthday_date'] = self.birthday_date
         player_infos['sexe'] = self.sexe
         player_infos['rank'] = self.rank
-        player_infos['total score'] = self.total_score
-        player_infos['tournament score'] = self.tournament_score
+        player_infos['total_score'] = self.total_score
+        player_infos['tournament_score'] = self.tournament_score
 
         if save_tournament_score:
-            player_infos['tournament score'] = self.tournament_score
+            player_infos['tournament_score'] = self.tournament_score
 
         return player_infos

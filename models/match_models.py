@@ -1,6 +1,7 @@
 """Module match_models."""
 from rich.console import Console
 from rich.table import Table
+
 from views.view_user_entry import ViewUserEntry
 
 
@@ -66,10 +67,10 @@ class Match:
     def serialized_match(self):
         """Serialize les infos d'un match et renvoie ces informations."""
         match_infos = {}
-        match_infos['player 1'] = self.player_1.serialized_player(save_tournament_score=True)
-        match_infos['score player 1'] = self.score_player_1
-        match_infos['player 2'] = self.player_2.serialized_player(save_tournament_score=True)
-        match_infos['score player 2'] = self.score_player_2
+        match_infos['player_1'] = self.player_1.serialized_player(save_tournament_score=True)
+        match_infos['score_player_1'] = self.score_player_1
+        match_infos['player_2'] = self.player_2.serialized_player(save_tournament_score=True)
+        match_infos['score_player_2'] = self.score_player_2
         match_infos['winner'] = self.winner
         match_infos['name'] = self.name
 

@@ -1,7 +1,8 @@
 """Module tournament_models."""
-from models.tour_models import Tour
 from itertools import permutations
 from random import shuffle
+
+from models.tour_models import Tour
 
 
 class Tournament:
@@ -56,7 +57,7 @@ class Tournament:
         # Pour les tours compris entre le premier et le dernier tour.
         # L'appariement des joueurs est fait de facon aléatoire et non répetitives.
         # Chaque joueur fait le même nombre de matchs.
-        elif current_tour < self.number_tours - 1:
+        elif current_tour < int(self.number_tours) - 1:
             sorted_players = sorted(self.players)
             pairs = list(permutations(sorted_players, 2))  # permutations de longueur 2
             shuffle(pairs)                                 # mélanger
@@ -149,10 +150,10 @@ class Tournament:
         tournament_infos['name'] = self.name
         tournament_infos['location'] = self.location
         tournament_infos['date'] = self.date
-        tournament_infos['time control'] = self.time_control
+        tournament_infos['time_control'] = self.time_control
         tournament_infos['players'] = [player.serialized_player(save_tournament_score=True) for player in self.players]
         tournament_infos['description'] = self.description
-        tournament_infos['number tours'] = self.number_tours
+        tournament_infos['number_tours'] = self.number_tours
         tournament_infos['tours'] = [tour.serialized_tour() for tour in self.tours]
 
         if save_tours:

@@ -52,8 +52,8 @@ class Tour:
 
         return {
             "name": self.name,
-            "pairs players": serialized_pairs_players,
+            "pairs_players": serialized_pairs_players,
             "matchs": [match.serialized_match() for match in self.matchs],
-            "time start": self.time_start,
-            "time end": self.time_end,
+            "time_start": self.time_start,
+            "time_end": self.time_end,
         }

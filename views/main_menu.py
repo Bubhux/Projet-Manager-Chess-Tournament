@@ -1,8 +1,9 @@
 """Module main_menu."""
 from rich.console import Console
 from rich.table import Table
+
 from views.view_user_entry import ViewUserEntry
-from views.player_menu import CreatePlayer
+from views.player_menu import CreatePlayer, LoadindPlayer
 from views.tournament_menu import LoadingTournament
 from views.report_menu import Report
 
@@ -13,6 +14,7 @@ from controllers.database_controllers import DataBase
 
 class MainMenu(ViewUserEntry):
     """Class affichage menu principal."""
+
     def display_main_menu(self):
         """Fonction affichage du menu principal."""
         console = Console()
@@ -47,7 +49,6 @@ class MainMenu(ViewUserEntry):
                     value_type="numeric"
                 ))
                 for _ in range(num_players):
-                    CreatePlayer().display_create_player_menu()
                     serialized_new_player = CreatePlayer().display_create_player_menu()
                     database.save_database("players", serialized_new_player)
 
@@ -58,7 +59,7 @@ class MainMenu(ViewUserEntry):
                     tournament = database.loading_tournament(serialized_tournament)
                     break
                 else:
-                    console.print("Aucun tournoi sauvegardé.", style="bold red")
+                    console.print("Aucun tournoi chargé.", style="bold red")
                     continue
 
             # Voir les rapports.
@@ -113,18 +114,50 @@ class MainMenu(ViewUserEntry):
         # Lancement du tournoi.
         console.print("\nSélectionner", style="bold blue")
         console.print("1 - Jouer le tournoi")
+        if not tournament.players:
+            console.print("2 - Charger des joueurs et jouer le tournoi")
         console.print("q - Quitter")
 
         user_input = self.user_entry(
             message_display="> ",
             message_error="Veuillez entrer un choix valide",
             value_type="Sélection",
-            assertions=["1", "q"]
+            assertions=["1", "2", "q"]
         )
 
-        # Récupération des résultats quand le tournoi est terminé.
         if user_input == "1":
+            players = []
+            if len(tournament.players) == 0:
+                console.print("Aucun joueur dans le tournoi. Veuillez charger des joueurs.", style="bold blue")
+                number_players = int(self.user_entry(
+                    message_display="Nombre de joueurs à charger :\n> ",
+                    message_error="Entrer une valeur numérique valide ",
+                    value_type="numeric"
+                ))
+                serialized_players = LoadindPlayer().display_loading_player(
+                    number_players_loading=number_players
+                )
+                for serialized_player in serialized_players:
+                    player = database.loading_player(serialized_player)
+                    tournament.players.append(player)
+
             rankings = play_tournament(tournament, loading_new_tournament=True)
+
+        elif user_input == "2":
+            number_players = int(self.user_entry(
+                message_display="Nombre de joueurs à charger :\n> ",
+                message_error="Entrer une valeur numérique valide ",
+                value_type="numeric"
+            ))
+            serialized_players = LoadindPlayer().display_loading_player(
+                number_players_loading=number_players
+            )
+            for serialized_player in serialized_players:
+                player = database.loading_player(serialized_player)
+                tournament.players.append(player)
+
+            rankings = play_tournament(tournament, loading_new_tournament=True)
+
         else:
             quit()
 
@@ -147,6 +180,7 @@ class MainMenu(ViewUserEntry):
         console.print("1 - Automatiquement")
         console.print("2 - Manuellement")
         console.print("q - Quitter")
+        console.print()
 
         user_input = self.user_entry(
             message_display="> ",
@@ -154,6 +188,7 @@ class MainMenu(ViewUserEntry):
             value_type="Sélection",
             assertions=["1", "2", "q"]
         )
+        console.print()
 
         if user_input == "1":
             for i, player in enumerate(rankings):
@@ -162,7 +197,7 @@ class MainMenu(ViewUserEntry):
         elif user_input == "2":
             for player in rankings:
                 rank = self.user_entry(
-                    message_display=f"classement de {player}:\n> ",
+                    message_display=f"Saisir le classement de {player}:\n> ",
                     message_error="Veuillez entrer un nombre entier.",
                     value_type="numeric"
                 )

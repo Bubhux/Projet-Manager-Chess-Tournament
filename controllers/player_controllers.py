@@ -1,4 +1,7 @@
 """Module player_controllers."""
+from rich.console import Console
+from rich.table import Table
+
 from views.player_menu import CreatePlayer
 from models.player_models import Player
 from controllers.database_controllers import DataBase
@@ -29,7 +32,7 @@ def create_player():
 
 
 def update_rankings(player, rank, score=True):
-    """Fonction de mise a jour du classement."""
+    """Fonction de mise à jour du classement."""
     database = DataBase()
 
     if score:
@@ -38,5 +41,17 @@ def update_rankings(player, rank, score=True):
     player.rank = rank
     serialized_player = player.serialized_player(save_tournament_score=True)
     database.update_player_rank("players", serialized_player)
-    print(f"Mise à jour du rang de {player}:\nScore total: {player.total_score} pts\nRang: {player.rank}")
-    print("=============================================================================================")
+
+    # Création de la table
+    table = Table(title="Mise à jour du rang", style="bold magenta")
+    table.add_column("Attribut")
+    table.add_column("Valeur")
+
+    table.add_row("Joueur", str(player))
+    table.add_row("Score total", f"{player.total_score} pts")
+    table.add_row("Rang", str(player.rank))
+
+    # Affichage de la table
+    console = Console()
+    console.print(table)
+    console.print("---------------------------------------------------------------")

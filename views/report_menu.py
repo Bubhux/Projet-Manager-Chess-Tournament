@@ -1,13 +1,15 @@
 """Module report_menu."""
-from views.view_user_entry import ViewUserEntry
-from controllers.database_controllers import DataBase
-from operator import itemgetter
 from rich.console import Console
 from rich.table import Table
+from operator import itemgetter
+
+from views.view_user_entry import ViewUserEntry
+from controllers.database_controllers import DataBase
 
 
 class Report(ViewUserEntry):
     """Class report."""
+
     def __init__(self):
         """Initialise un rapport."""
         database = DataBase()
@@ -65,9 +67,9 @@ class Report(ViewUserEntry):
                 table.add_column("Valeur")
 
                 table.add_row("Rang:", str(selected_player['rank']))
-                table.add_row("Score total:", str(selected_player['total score']))
+                table.add_row("Score total:", str(selected_player['total_score']))
                 table.add_row("Nom complet:", f"{selected_player['name']} {selected_player['surname']}")
-                table.add_row("Date de naissance:", selected_player['birthday date'])
+                table.add_row("Date de naissance:", selected_player['birthday_date'])
                 table.add_row("Sexe:", selected_player['sexe'])
 
                 self.console.print(table)
@@ -87,6 +89,7 @@ class Report(ViewUserEntry):
 
     def display_menu_tournaments_reports(self):
         """Affiche le menu pour les rapports de tournoi."""
+        self.console.print()
         self.console.print("Voir les détails d'un tournoi", style="bold blue")
 
         builded_selection = self.build_selection(
@@ -119,8 +122,8 @@ class Report(ViewUserEntry):
                 table.add_row("Nom", selected_tournament['name'])
                 table.add_row("Lieu", selected_tournament['location'])
                 table.add_row("Date", selected_tournament['date'])
-                table.add_row("Contrôle du temps", selected_tournament['time control'])
-                table.add_row("Nombre de tours", str(selected_tournament['number tours']))
+                table.add_row("Contrôle du temps", selected_tournament['time_control'])
+                table.add_row("Nombre de tours", str(selected_tournament['number_tours']))
                 table.add_row("Description", selected_tournament['description'])
 
                 self.console.print(table)
@@ -200,8 +203,8 @@ class Report(ViewUserEntry):
 
                     table.add_row("Nom", selected_tour['name'])
                     table.add_row("Nombre de matchs", str(len(selected_tour['matchs'])))
-                    table.add_row("Date de début", selected_tour['time start'])
-                    table.add_row("Date de fin", selected_tour['time end'])
+                    table.add_row("Date de début", selected_tour['time_start'])
+                    table.add_row("Date de fin", selected_tour['time_end'])
 
                     console.print(table)
 
@@ -246,22 +249,29 @@ class Report(ViewUserEntry):
 
                                 table.add_row(
                                     "Joueur 1",
-                                    f"{selected_match['player 1']['name']} {selected_match['player 1']['surname']} "
-                                    f"({selected_match['score player 1']} pts)"
+                                    f"{selected_match['player_1']['name']} {selected_match['player_1']['surname']} "
+                                    f"({selected_match['score_player_1']} pts)"
                                 )
                                 table.add_row(
                                     "Joueur 2",
-                                    f"{selected_match['player 2']['name']} {selected_match['player 2']['surname']} "
-                                    f"({selected_match['score player 2']} pts)"
+                                    f"{selected_match['player_2']['name']} {selected_match['player_2']['surname']} "
+                                    f"({selected_match['score_player_2']} pts)"
                                 )
-                                # Récupére le prénom et le nom du gagnant
-                                winner_name = ' '.join(selected_match['winner']) if selected_match['winner'] else "Pending"
+
+                                # Récupération du prénom et du nom du gagnant
+                                if selected_match['winner']:
+                                    full_name = selected_match['winner']
+                                    first_name, last_name = full_name.split()
+                                    winner_name = f"[size=8]{first_name} {last_name}[/size]"
+                                else:
+                                    winner_name = "Pending"
+
                                 table.add_row("Gagnant", winner_name)
 
                                 console.print(table)
 
                                 self.console.print("\nSélectionner", style="bold blue")
-                                self.console.print("r - Retour")
+                                self.console.print("r - Retour 4")
 
                                 user_input = self.user_entry(
                                     message_display="> ",
@@ -271,7 +281,7 @@ class Report(ViewUserEntry):
                                 )
 
                                 if user_input == "r":
-                                    break
+                                    return Report().display_menu_tournaments_reports()
 
     @staticmethod
     def sort_players(players: list, by_rank: bool) -> list:

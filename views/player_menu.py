@@ -1,6 +1,7 @@
 """Module player_menu."""
 from rich.console import Console
 from rich.table import Table
+
 from views.view_user_entry import ViewUserEntry
 from controllers.database_controllers import DataBase
 
@@ -9,6 +10,7 @@ console = Console()
 
 class CreatePlayer(ViewUserEntry):
     """Class création de joueurs."""
+
     def display_create_player_menu(self):
         """Fonction d'affichage du menu de création de joueur."""
         console.print("Tapez le prénom du joueur :", style="bold blue")
@@ -62,8 +64,9 @@ class LoadindPlayer(ViewUserEntry):
         all_players = database.loading_database(database_name="players")
         serialized_loading_players = []
 
-        for i in range(int(number_players_loading)):
-            console.print(f"Plus que {str(int(number_players_loading) - i)} joueurs à charger", style="bold green")
+        while int(number_players_loading) > 0:
+            console.print()
+            console.print(f"Plus que {str(int(number_players_loading))} joueurs à charger", style="bold green")
             table = Table(title="Sélectionner un joueur", title_justify="left")
             table.add_column("ID", style="bold magenta")
             table.add_column("Nom", style="bold magenta")
@@ -79,12 +82,12 @@ class LoadindPlayer(ViewUserEntry):
             user_input = int(self.user_entry(
                 message_display="> ",
                 message_error="Veuillez entrer un nombre entier",
-                value_type=assertions
+                value_type="numeric"
             ))
             if all_players[user_input-1] not in serialized_loading_players:
                 serialized_loading_players.append(all_players[user_input-1])
+                number_players_loading -= 1
             else:
-                console.print("Ce joueur est déjà chargé sélectionner un autre joueur", style="bold red")
-                number_players_loading += 1
+                console.print("Ce joueur est déjà chargé. Veuillez sélectionner un autre joueur.", style="bold red")
 
         return serialized_loading_players

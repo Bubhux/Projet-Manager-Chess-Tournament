@@ -1,10 +1,13 @@
 """Module tournament_controllers."""
 from rich.console import Console
 from rich.table import Table
+
 from models.tournament_models import Tournament
+
 from views.view_user_entry import ViewUserEntry
 from views.tournament_menu import CreateTournament, LoadingTournament
 from views.player_menu import LoadindPlayer
+
 from controllers.player_controllers import create_player, update_rankings
 from controllers.database_controllers import DataBase
 
@@ -18,18 +21,26 @@ def create_tournament():
     # Récupération des données du tournoi.
     user_data = CreateTournament().display_tournament_menu()
 
-    # Choix chargement des joueurs.
-    console.print("[bold]Sélectionner[/bold]\n1 - Créer des joueurs\n2 - Charger des joueurs")
+    # Choix chargement des joueurs ou sauvegarde du tournoi.
+    console.print("\nSélectionner", style="bold blue")
+    console.print("1 - Créer des joueurs")
+    console.print("2 - Charger des joueurs")
+    console.print("3 - Sauvegarder le tournoi")
 
     user_input = menu.user_entry(
         message_display="> ",
         message_error="Entrer un choix valide",
         value_type="Sélection",
-        assertions=["1", "2"]
+        assertions=["1", "2", "3"]
     )
 
+    # Création des joueurs.
+    if user_input == "1":
+        console.print(f"Création de {str(user_data['number_players'])} joueurs")
+        players = [create_player() for _ in range(int(user_data['number_players']))]
+
     # Chargement des joueurs.
-    if user_input == "2":
+    elif user_input == "2":
         players = []
         user_input = menu.user_entry(
             message_display="Combien de joueurs à charger ?\n> ",
@@ -43,11 +54,19 @@ def create_tournament():
             player = database.loading_player(serialized_player)
             players.append(player)
 
-    # Création des joueurs.
-    else:
-        console.print(f"Création de {str(user_data['number_players'])} joueurs")
+    # Sauvegarde du tournoi.
+    elif user_input == "3":
+        tournament = Tournament(
+            user_data['name'],
+            user_data['location'],
+            user_data['date'],
+            user_data['time_control'],
+            [],
+            user_data['description'],
+            user_data['number_tours'])
+        database.save_database("tournaments", tournament.serialized_tournament())
 
-        players = [create_player() for _ in range(int(user_data['number_players']))]
+        return tournament
 
     # Création du tournoi.
     tournament = Tournament(
@@ -79,7 +98,7 @@ def play_tournament(tournament, loading_new_tournament=False):
             for tour in tournament.tours:
                 if tour.time_end == "":
                     z += 1
-            number_tours_play = tournament.number_tours - z
+            number_tours_play = int(tournament.number_tours) - z
             loading_new_tournament = False
         else:
             number_tours_play = tournament.number_tours

@@ -1,7 +1,8 @@
 """Module tournament_menu."""
+from rich.console import Console
+
 from views.view_user_entry import ViewUserEntry
 from controllers.database_controllers import DataBase
-from rich.console import Console
 
 
 class CreateTournament(ViewUserEntry):

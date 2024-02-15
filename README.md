@@ -19,7 +19,11 @@
 10. **[Développement](#developpement)**   
 11. **[Auteur et contact](#auteur-contact)**     
 
-### Projet Chess Tournament   
+
+<div style="display: flex; align-items: center;">
+    <h3>Projet Chess Tournament</h3>
+    <img src="/static/pictures/icon_chess.png" alt="Icon Chess" width="60">
+</div>
 
 - Projet de création d'un programme, dont la structure et l'utilisation et la gestion d'un tournoi d'échecs.   
   Le programme utilise le système suisse, la procédure d'appariement et d'organisation du programme respect ce même système.   
@@ -33,7 +37,7 @@
   Ainsi, avec ce système, chaque joueur participe au même nombre de matchs.   
   &nbsp;   
 
-- Le programme est fonctionnel sur un format de 4 ou 8 joueurs avec un minimum de 4 tours par défaut.   
+- Le programme est fonctionnel sur un format de **4** ou **8** joueurs avec un minimum de **4** tours par défaut.   
 Il est architecturé et construit sur le design pattern ``MVC`` **(Modèles - Vues - Controlleurs)**, l'utilisation de la librairie ``TinyDB`` est   nécessaire pour sauvegarder les joueurs et les tournois.   
 
 --------------------------------------------------------------------------------------------------------------------------------
@@ -49,7 +53,6 @@ Application conçue avec les technologies suivantes :
   &nbsp;   
   
 - **TinyDB** v4.7.1   
- 
 - **Windows** 7 professionnel SP1   
   &nbsp;   
 
@@ -75,7 +78,7 @@ Taper dans votre terminal :
 $ python -m venv env
 ```  
 
->*Note : Un répertoire appelé ``env`` doit être créé.*   
+>*Note : Un répertoire appelé **env** doit être créé.*   
 
 --------------------------------------------------------------------------------------------------------------------------------
 
@@ -173,23 +176,27 @@ $ python main.py
 
 . **Capture d'écran du menu principal.**   
 
-![Menu principal](static/pictures/chess_tournament_menu.png)    
+![Menu principal](static/pictures/chess_tournament_menu.png)   
 
 . **Capture d'écran chargement de tournoi.**   
 
-![chargement tournoi](static/pictures/chess_tournament_loading_tournament.png)    
+![chargement tournoi](static/pictures/chess_tournament_loading_tournament.png)   
 
 . **Capture d'écran détails de tournoi.**   
 
-![chargement tournoi](static/pictures/chess_tournament_details_tournament.png)  
+![chargement tournoi](static/pictures/chess_tournament_details_tournament.png)   
 
 . **Capture d'écran rapport d'un tour et d'un match.**   
 
-![chargement tournoi](static/pictures/chess_tournament_details_tour_match.png)  
+![chargement tournoi](static/pictures/chess_tournament_details_tour_match.png)   
 
 . **Capture d'écran détails d'un match.**   
 
-![chargement tournoi](static/pictures/chess_tournament_playing_match.png)  
+![chargement tournoi](static/pictures/chess_tournament_playing_match.png)   
+
+. **Capture d'écran détails d'une mise à jour.**   
+
+![chargement tournoi](static/pictures/chess_tournament_details_update_player.png)   
 
 --------------------------------------------------------------------------------------------------------------------------------
 
@@ -218,7 +225,7 @@ Installation de **flake8** en entrant dans votre terminal la commande :
 $ pip intall flake8-html
 ```
 
-- Créer un fichier ```setup.cfg``` si il n'existe pas.   
+- Créer un fichier ```.flake8``` si il n'existe pas.   
 
 Ecrire le texte suivant dedans :   
 
@@ -226,6 +233,8 @@ Ecrire le texte suivant dedans :
 [flake8]
 exclude = .git, env, __pycache__, .gitignore
 max-line-length = 119
+ignore = F841
+filename = main_menu.py
 ```
 
 Tapez dans votre terminal la commande :   
