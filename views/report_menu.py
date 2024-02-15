@@ -271,7 +271,7 @@ class Report(ViewUserEntry):
                                 console.print(table)
 
                                 self.console.print("\nSélectionner", style="bold blue")
-                                self.console.print("r - Retour 4")
+                                self.console.print("r - Retour")
 
                                 user_input = self.user_entry(
                                     message_display="> ",
