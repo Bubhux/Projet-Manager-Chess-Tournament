@@ -239,7 +239,7 @@ Tapez dans votre terminal la commande :
 $ flake8 --format=html --htmldir=flake-report
 ```   
 
-- Un rapport sera généré dans le dossier ``flake8``.   
+- Un rapport sera généré dans le dossier ``flake-report``.   
 
 --------------------------------------------------------------------------------------------------------------------------------
 
