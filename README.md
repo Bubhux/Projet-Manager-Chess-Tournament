@@ -23,10 +23,10 @@
 
 - Projet de création d'un programme, dont la structure et l'utilisation et la gestion d'un tournoi d'échecs.   
   Le programme utilise le système suisse, la procédure d'appariement et d'organisation du programme respect ce même système.   
-  le premier tour (appelé "rondes" aux échecs) est basé sur le classement elo des joueurs, ensuite entre le premier et le dernier tour la création d'appariement des paires est faite de façon   aléatoire et non-répétitives.   
+  le premier tour (appelé **"rondes"** aux échecs) est basé sur le classement **elo** des joueurs, ensuite entre le premier et le dernier tour la création d'appariement des paires est faite de façon   aléatoire et non-répétitives.   
   &nbsp;   
 
-- Pour le dernier, tour l'appariement est fait sur le score s'ils sont égaux, alors l'appariement est fait par le classement elo.   
+- Pour le dernier, tour l'appariement est fait sur le score s'ils sont égaux, alors l'appariement est fait par le classement **elo**.   
   &nbsp;   
 
 - Par conséquent, de cette manière les joueurs les plus forts se rencontrent pour le tour final, il en est de même pour les joueurs les plus faibles. 
@@ -54,7 +54,7 @@ Application conçue avec les technologies suivantes :
 
 - Les scripts **Python** s'exécute depuis un terminal.   
 
-  - Pour ouvrir un terminal sur Windows, pressez la touche ```windows + r``` et entrez ```cmd```.   
+  - Pour ouvrir un terminal sur **Windows**, pressez la touche ```windows + r``` et entrez ```cmd```.   
   - Sur **Mac**, pressez la touche ```command + espace``` et entrez ```terminal```.   
   - Sur **Linux**, vous pouvez ouviri un terminal en pressant les touches ```Ctrl + Alt + T```.   
 
